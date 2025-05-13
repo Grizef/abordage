@@ -1,49 +1,111 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import Carousel from "../components/Carousel.astro";
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header />
+    <main style="text-align: center;">
+      <div class="col">
+        <div class="row">
+          <p class="bold">
+            Comment conserver l'envie de vivre quand on est seul et que l'on n'a
+            plus la possibilité de se déplacer pour rencontrer des amis ou faire
+            de nouvelles connaissances ?
+          </p>
+          <p class="bold">
+            Comment conserver les capacités vitales quand on n'est plus stimulé
+            ?
+          </p>
+          <p class="bold">
+            Comment avoir encore des projets et des envies quand une solitude
+            routinière s'est installée ?
+          </p>
+          <p class="bold">
+            Bien sûr, le passage de l'infirmière, de la personne qui livre les
+            repas, de l'assistante de vie social rythme les semaines, mais les
+            moments de solitude sont bien longs.
+          </p>
+          <p class="bold">De quoi sera fait demain ?</p>
+          <p class="bold">On ne se pose même plus ces questions...</p>
+          <img src="/vieux_seul.jpg" alt="personne âgée seule" />
+          <p class="bold">Si vous...</p>
+          <p>
+            Avez 65 ans et plus...
+            <br />
+            Vivez seul ou vous avez perdu votre conjoint(e).
+            <br />
+            Vivez en couple mais malgré tout vous n'avez plus beaucoup de contacts
+            avec les autres.
+            <br />
+            L'ennui s'installe.
+            <br />
+            Avez des difficultés visuelles, auditives, physiques et votre mémoire
+            vous joue des tours.
+            <br />
+            N'avez plus la possibilité de vous déplacer par vos propres moyens, la
+            famille est loin, le cercle des amis se réduit.
+          </p>
+          <p class="bold">Venez nous rejoindre !!!</p>
+          <p>
+            Devenez accueilli pour 15 € par an. Coût de la séance : 6€ Nous
+            proposons le voiturage si besoin pour 0,10 €/km Nous vous offrons le
+            goûter !
+          </p>
+          <p>
+            Notre association s'inscrit dans le dispositif du bien vieillir et
+            de la prévention de la perte d'autonomie des seniors.
+          </p>
+          <p>
+            A ce jour, nous développons ces activités dans le sud de la Sarthe.
+          </p>
+          <h4>Pourquoi Abord'Âge Sud-Sarthe ?</h4>
+          <p style="text-align: left;">
+            En septembre 2017, un groupe d'amis du milieu médical et paramédical
+            a créé une association qui se nomme : Abord'Age Sud-Sarthe.
+            <br />
+            Le bureau de notre association a su s'entourer de bénévoles formidables
+            qui composent le conseil d'administration.
+            <br />
+            La bienveillance, le respect, l'équité, la solidarité, l'empathie sont
+            les valeurs principales prônées par notre association. Nous avons donc
+            monté un projet : accueillir des personnes âgées isolées qui demeurent
+            à domicile afin de leur permettre de participer à des après-midis récréatifs
+            et stimulants dans le but de recréer du lien social et conserver les
+            capacités vitales.
+            <br />
+            Depuis le 21 août 2018, nous avons ouvert quatre espaces d'accueil qui
+            regroupent un cinquantaine de personnes au total. Le premier accueil
+            fut créer à Mansigné, puis trois ont vu le jour à Vaas, à Aubigné-Racan,
+            et Luché-Pringé dans la Sarthe.
+            <br />
+            Voici certains retours que l'on peut entendre lors de ces accueils :
+            « ces après-midis nous sortent de notre solitude, de notre isolement,
+            de nos chagrins !... Moi, les mardis, se sont mes dimanches !... Ici
+            on rit de bon cœur, tous en chœur !... »
+            <br />
+            Nous avons organisé une après-midi pour célébrer et présenter la semaine
+            bleue en collaboration avec l'association
+          </p>
+        </div>
+        <div class="row">
+		  <Carousel/>
+        </div>
+      </div>
+    </main>
+    <Footer />
+  </body>
 </html>
+<style>
+  .bold {
+    font-weight: bold;
+  }
+</style>

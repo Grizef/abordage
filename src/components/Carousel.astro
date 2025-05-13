@@ -1,0 +1,42 @@
+---
+const images = [
+  { src: "partenaires/banque_populaire.png", alt: "Banque Populaire" },
+  { src: "partenaires/carsat.jpg", alt: "Carsat" },
+  { src: "partenaires/communes_chateau.jpg", alt: "Communes Château" },
+  { src: "partenaires/communes_luche.jpg", alt: "Communes Luche" },
+  { src: "partenaires/communes_mansige.jpg", alt: "Communes Mansigné" },
+  { src: "partenaires/communes_sudsarthe.jpg", alt: "Communes Sud Sarthe" },
+  { src: "partenaires/communes_vaas.jpg", alt: "Communes Vaas" },
+  { src: "partenaires/cpam.jpg", alt: "CPAM" },
+  { src: "partenaires/credit_agricole.png", alt: "Crédit Agricole" },
+  { src: "partenaires/fdva.png", alt: "FDVA" },
+  { src: "partenaires/finaceurs_prevention.png", alt: "Financeurs Prévention" },
+  { src: "partenaires/gip.jpg", alt: "GIP" },
+  { src: "partenaires/ope_bouchons.jpg", alt: "Opération Bouchons" },
+  { src: "partenaires/radio_prevert.jpg", alt: "Radio Prévert" },
+  { src: "partenaires/richard_auto.jpg", alt: "Richard Auto" },
+];
+---
+
+<style>
+  .carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  .carousel img {
+    width: 180px;
+    height: auto;
+    flex-shrink: 0;
+    scroll-snap-align: center;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  }
+</style>
+
+<div class="carousel" role="region" aria-label="Partenaires">
+  {images.map(({ src, alt }) => <img src={src} alt={alt} loading="lazy" />)}
+</div>

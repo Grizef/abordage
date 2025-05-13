@@ -1,11 +1,10 @@
 ---
 import HeaderLink from './HeaderLink.astro';
-import { SITE_TITLE } from '../consts';
 ---
 
 <header>
 	<nav>
-		<h2><a href="/">{SITE_TITLE}</a></h2>
+		<img src="logo.png" alt="Abord'age" width="100vh" />
 		<div class="internal-links">
 			<HeaderLink href="/">Home</HeaderLink>
 			<HeaderLink href="/blog">Blog</HeaderLink>
@@ -13,6 +12,8 @@ import { SITE_TITLE } from '../consts';
 			<HeaderLink href="/activites">Activités</HeaderLink>
 			<HeaderLink href="/evenements">Actions</HeaderLink>
 			<HeaderLink href="/contact">Contact</HeaderLink>
+			<HeaderLink href="/services">Services</HeaderLink>
+			<HeaderLink href="/temoignages">Témoignages</HeaderLink>
 		</div>
 		<div class="social-links">
 			<a href="https://m.webtoo.ls/@astro" target="_blank">

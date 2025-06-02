@@ -4,28 +4,136 @@ import Layout from "../layouts/Layout.astro";
 
 <Layout>
   <h2 class="text-2xl font-bold mb-4">Contact</h2>
-  <p>
-    Email : <a
-      href="mailto:abordage.sudsarthe@gmail.com"
-      class="text-blue-600 underline">abordage.sudsarthe@gmail.com</a
+
+  <div class="space-y-4">
+    <p>
+      <strong>Email :</strong>
+      <a
+        href="mailto:abordage.sudsarthe@gmail.com"
+        class="text-blue-600 underline"
+      >
+        abordage.sudsarthe@gmail.com
+      </a>
+    </p>
+
+    <p><strong>Téléphone :</strong> 07 83 59 18 54</p>
+    <p><strong>Adresse :</strong> 5 rue des Écoles, 72800 Aubigné-Racan</p>
+    <p><strong>N° SIRET :</strong> 834 686 446 000 24</p>
+  </div>
+
+  <h3 class="text-xl font-semibold mt-8 mb-2">Formulaire de contact :</h3>
+
+  <form
+    action="https://formspree.io/f/XXXXXXXX"
+    method="POST"
+    class="space-y-4 contact-form"
+  >
+    <div>
+      <label class="block font-medium">Nom :</label>
+      <input
+        type="text"
+        name="name"
+        required
+        class="w-full p-2 border border-gray-300 rounded"
+      />
+    </div>
+
+    <div>
+      <label class="block font-medium">Email :</label>
+      <input
+        type="email"
+        name="email"
+        required
+        class="w-full p-2 border border-gray-300 rounded"
+      />
+    </div>
+
+    <div>
+      <label class="block font-medium">Message :</label>
+      <textarea
+        name="message"
+        rows="6"
+        required
+        class="w-full p-2 border border-gray-300 rounded"></textarea>
+    </div>
+
+    <button
+      type="submit"
+      class="px-6 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition"
     >
-  </p>
-  <p>Téléphone : 07 83 59 18 54</p>
-  <p>Adresse : 5 rue des Écoles, 72800 Aubigné-Racan</p>
-  <p>N° SIRET : 834 686 446 000 24</p>
-  <p><b>Formulaire de contact a faire</b></p>
+      Envoyer
+    </button>
+  </form>
+
+  <h3 class="text-xl font-semibold mt-8 mb-2">Pour devenir adhérent :</h3>
   <p>
-    <b>Pour devenir adhérent :</b>
-    Vous êtes sensible aux valeurs de notre association, vous souhaitez nous aider
-    à participer à notre développement, notre projet vous semble pertinent et nécessaire
-    au mieux vieillir à domicile. Alors adhérent à notre association pour 15€/an
-    ! (défiscalisé à hauteur de 66%)
+    Vous êtes sensible aux valeurs de notre association, vous souhaitez nous
+    aider à participer à notre développement, notre projet vous semble pertinent
+    et nécessaire au mieux vieillir à domicile. Alors adhérez pour <strong
+      >15 €/an</strong
+    > ! (défiscalisé à hauteur de 66%)
   </p>
+
+  <h3 class="text-xl font-semibold mt-6 mb-2">
+    Pour devenir membre bienfaiteur :
+  </h3>
   <p>
-    <b>Pour devenir membre bienfaiteur :</b>
-    Selon le CGI (Code Général des Impôts) en vigueur, chaque don vous donne droit
-    à un crédit d'impôts de 66% (exemple : si vous donnez 20€ à l'Association, un
-    montant de 13€ vous sera restitué en crédit d'impôt ou déduit de votre montant
-    d'impôts à payer).
+    Selon le Code Général des Impôts (CGI), chaque don vous donne droit à un
+    crédit d'impôt de <strong>66%</strong>. Exemple : pour un don de 20€, 13€
+    sont restitués en crédit d'impôt.
   </p>
 </Layout>
+
+<style>
+  .contact-form {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  }
+
+  .contact-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #374151;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #ffffff;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .contact-form input:focus,
+  .contact-form textarea:focus {
+    border-color: #6b7280;
+    box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.15);
+    outline: none;
+  }
+
+  .contact-form button {
+    background-color: #374151;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .contact-form button:hover {
+    background-color: #1f2937;
+  }
+</style>

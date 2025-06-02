@@ -2,110 +2,130 @@
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import Carousel from "../components/Carousel.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 ---
 
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="fr">
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
   <body>
     <Header />
-    <main style="text-align: center;">
-      <div class="col">
-        <div class="row">
-          <p class="bold">
-            Comment conserver l'envie de vivre quand on est seul et que l'on n'a
-            plus la possibilité de se déplacer pour rencontrer des amis ou faire
-            de nouvelles connaissances ?
-          </p>
-          <p class="bold">
-            Comment conserver les capacités vitales quand on n'est plus stimulé
-            ?
-          </p>
-          <p class="bold">
-            Comment avoir encore des projets et des envies quand une solitude
-            routinière s'est installée ?
-          </p>
-          <p class="bold">
-            Bien sûr, le passage de l'infirmière, de la personne qui livre les
-            repas, de l'assistante de vie social rythme les semaines, mais les
-            moments de solitude sont bien longs.
-          </p>
-          <p class="bold">De quoi sera fait demain ?</p>
-          <p class="bold">On ne se pose même plus ces questions...</p>
-          <img src="/vieux_seul.jpg" alt="personne âgée seule" />
-          <p class="bold">Si vous...</p>
-          <p>
-            Avez 65 ans et plus...
-            <br />
-            Vivez seul ou vous avez perdu votre conjoint(e).
-            <br />
-            Vivez en couple mais malgré tout vous n'avez plus beaucoup de contacts
-            avec les autres.
-            <br />
-            L'ennui s'installe.
-            <br />
-            Avez des difficultés visuelles, auditives, physiques et votre mémoire
-            vous joue des tours.
-            <br />
-            N'avez plus la possibilité de vous déplacer par vos propres moyens, la
-            famille est loin, le cercle des amis se réduit.
-          </p>
-          <p class="bold">Venez nous rejoindre !!!</p>
-          <p>
-            Devenez accueilli pour 15 € par an. Coût de la séance : 6€ Nous
-            proposons le voiturage si besoin pour 0,10 €/km Nous vous offrons le
-            goûter !
-          </p>
-          <p>
-            Notre association s'inscrit dans le dispositif du bien vieillir et
-            de la prévention de la perte d'autonomie des seniors.
-          </p>
-          <p>
-            A ce jour, nous développons ces activités dans le sud de la Sarthe.
-          </p>
-          <h4>Pourquoi Abord'Âge Sud-Sarthe ?</h4>
-          <p style="text-align: left;">
-            En septembre 2017, un groupe d'amis du milieu médical et paramédical
-            a créé une association qui se nomme : Abord'Age Sud-Sarthe.
-            <br />
-            Le bureau de notre association a su s'entourer de bénévoles formidables
-            qui composent le conseil d'administration.
-            <br />
-            La bienveillance, le respect, l'équité, la solidarité, l'empathie sont
-            les valeurs principales prônées par notre association. Nous avons donc
-            monté un projet : accueillir des personnes âgées isolées qui demeurent
-            à domicile afin de leur permettre de participer à des après-midis récréatifs
-            et stimulants dans le but de recréer du lien social et conserver les
-            capacités vitales.
-            <br />
-            Depuis le 21 août 2018, nous avons ouvert quatre espaces d'accueil qui
-            regroupent un cinquantaine de personnes au total. Le premier accueil
-            fut créer à Mansigné, puis trois ont vu le jour à Vaas, à Aubigné-Racan,
-            et Luché-Pringé dans la Sarthe.
-            <br />
-            Voici certains retours que l'on peut entendre lors de ces accueils :
-            « ces après-midis nous sortent de notre solitude, de notre isolement,
-            de nos chagrins !... Moi, les mardis, se sont mes dimanches !... Ici
-            on rit de bon cœur, tous en chœur !... »
-            <br />
-            Nous avons organisé une après-midi pour célébrer et présenter la semaine
-            bleue en collaboration avec l'association
-          </p>
-        </div>
-        <div class="row">
-		  <Carousel/>
-        </div>
-      </div>
+    <main class="presentation-section">
+      <section>
+        <p class="bold">
+          Comment conserver l'envie de vivre quand on est seul et que l'on n'a plus la possibilité de se déplacer pour rencontrer des amis ou faire de nouvelles connaissances ?
+        </p>
+        <p class="bold">
+          Comment conserver les capacités vitales quand on n'est plus stimulé ?
+        </p>
+        <p class="bold">
+          Comment avoir encore des projets et des envies quand une solitude routinière s'est installée ?
+        </p>
+        <p class="bold">
+          Bien sûr, le passage de l'infirmière, de la personne qui livre les repas, de l'assistante de vie sociale rythme les semaines, mais les moments de solitude sont bien longs.
+        </p>
+        <p class="bold">De quoi sera fait demain ?</p>
+        <p class="bold">On ne se pose même plus ces questions...</p>
+
+        <img src="/vieux_seul.jpg" alt="Personne âgée seule" style="max-width: 60%; margin: 2rem auto;" />
+
+        <p class="bold">Si vous...</p>
+        <ul style="text-align: left;">
+          <li>Avez 65 ans et plus...</li>
+          <li>Vivez seul(e) ou avez perdu votre conjoint(e)</li>
+          <li>Vivez en couple mais manquez de contacts sociaux</li>
+          <li>Ressentez l’ennui au quotidien</li>
+          <li>Avez des difficultés visuelles, auditives, physiques ou de mémoire</li>
+          <li>N’avez plus la possibilité de vous déplacer facilement</li>
+        </ul>
+
+        <p class="bold">Venez nous rejoindre !!!</p>
+
+        <p>
+          Devenez accueilli pour <strong>15 € par an</strong>. Coût d’une séance : <strong>6 €</strong>.
+          <br />Nous proposons le voiturage si besoin (0,10 €/km) et nous vous offrons le goûter !
+        </p>
+
+        <p>
+          Notre association s’inscrit dans le cadre du <strong>bien vieillir</strong> et de la <strong>prévention de la perte d’autonomie</strong> des seniors.
+        </p>
+
+        <p>
+          Aujourd’hui, nous développons ces activités dans le <strong>sud de la Sarthe</strong>.
+        </p>
+      </section>
+
+      <section>
+        <h4>Pourquoi Abord’Âge Sud-Sarthe ?</h4>
+
+        <p>
+          En septembre 2017, un groupe d’amis du milieu médical et paramédical a fondé l’association Abord’Âge Sud-Sarthe.
+        </p>
+
+        <p>
+          Le bureau s’est entouré de bénévoles formidables pour former un conseil d’administration engagé. Nos valeurs :
+          <strong>bienveillance, respect, équité, solidarité, empathie</strong>.
+        </p>
+
+        <p>
+          Notre objectif : accueillir des personnes âgées isolées à domicile, et leur offrir des <strong>après-midis récréatifs et stimulants</strong> pour maintenir leurs capacités et créer du lien social.
+        </p>
+
+        <p>
+          Depuis le 21 août 2018, nous avons ouvert <strong>quatre espaces d’accueil</strong> à Mansigné, Vaas, Aubigné-Racan et Luché-Pringé. Ils regroupent une cinquantaine de personnes.
+        </p>
+
+        <p>
+          Voici quelques retours de nos participants :
+          <br />« Ces après-midis nous sortent de notre solitude, de nos chagrins. »
+          <br />« Moi, les mardis, ce sont mes dimanches ! »
+          <br />« Ici on rit de bon cœur, tous en chœur ! »
+        </p>
+      </section>
+
+      <section>
+        <h3>Nos partenaires</h3>
+        <Carousel />
+      </section>
     </main>
+
     <Footer />
   </body>
 </html>
+
 <style>
   .bold {
     font-weight: bold;
+  }
+
+  .presentation-section {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: justify;
+  }
+
+  .presentation-section h4,
+  .presentation-section h3 {
+    text-align: center;
+    margin: 2rem 0 1rem;
+  }
+
+  .presentation-section ul {
+    margin: 1rem 0 2rem 1rem;
+    padding-left: 1.2rem;
+  }
+
+  .presentation-section li {
+    margin-bottom: 0.5rem;
+  }
+
+  .presentation-section img {
+    display: block;
+    margin: 2rem auto;
+    border-radius: 8px;
   }
 </style>

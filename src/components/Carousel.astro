@@ -2,41 +2,87 @@
 const images = [
   { src: "partenaires/banque_populaire.png", alt: "Banque Populaire" },
   { src: "partenaires/carsat.jpg", alt: "Carsat" },
-  { src: "partenaires/communes_chateau.jpg", alt: "Communes Château" },
-  { src: "partenaires/communes_luche.jpg", alt: "Communes Luche" },
-  { src: "partenaires/communes_mansige.jpg", alt: "Communes Mansigné" },
-  { src: "partenaires/communes_sudsarthe.jpg", alt: "Communes Sud Sarthe" },
-  { src: "partenaires/communes_vaas.jpg", alt: "Communes Vaas" },
+  { src: "partenaires/communes_chateau.jpg", alt: "Commune de Château" },
+  { src: "partenaires/communes_luche.jpg", alt: "Commune de Luché" },
+  { src: "partenaires/communes_mansige.jpg", alt: "Commune de Mansigné" },
+  { src: "partenaires/communes_sudsarthe.jpg", alt: "Communauté Sud Sarthe" },
+  { src: "partenaires/communes_vaas.jpg", alt: "Commune de Vaas" },
   { src: "partenaires/cpam.jpg", alt: "CPAM" },
   { src: "partenaires/credit_agricole.png", alt: "Crédit Agricole" },
   { src: "partenaires/fdva.png", alt: "FDVA" },
   { src: "partenaires/finaceurs_prevention.png", alt: "Financeurs Prévention" },
-  { src: "partenaires/gip.jpg", alt: "GIP" },
+  { src: "partenaires/gip.jpg", alt: "GIP Café Cultures" },
   { src: "partenaires/ope_bouchons.jpg", alt: "Opération Bouchons" },
   { src: "partenaires/radio_prevert.jpg", alt: "Radio Prévert" },
-  { src: "partenaires/richard_auto.jpg", alt: "Richard Auto" },
+  { src: "partenaires/richard_auto.jpg", alt: "Richard Automobiles" },
 ];
 ---
 
 <style>
-  .carousel {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 1rem;
-    padding: 1rem;
-  }
-  .carousel img {
-    width: 180px;
-    height: auto;
-    flex-shrink: 0;
-    scroll-snap-align: center;
-    border-radius: 8px;
-    background: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-  }
+.carousel-container {
+  text-align: center;
+}
+
+.carousel-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+.carousel-track img {
+  width: 180px;
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.carousel-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.carousel-button {
+  background: white;
+  border: 1px solid #ccc;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 1.2rem;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+.carousel-button:hover {
+  background-color: #f1f1f1;
+}
 </style>
 
-<div class="carousel" role="region" aria-label="Partenaires">
-  {images.map(({ src, alt }) => <img src={src} alt={alt} loading="lazy" />)}
+<div class="carousel-container">
+  <div class="carousel-track" id="carousel">
+    {images.map(({ src, alt }) => (
+      <img src={src} alt={alt} loading="lazy" />
+    ))}
+  </div>
+  <div class="carousel-controls">
+    <button class="carousel-button" onclick="scrollCarousel(-1)">← Précédent</button>
+    <button class="carousel-button" onclick="scrollCarousel(1)">Suivant →</button>
+  </div>
 </div>
+
+<script is:inline>
+  function scrollCarousel(direction) {
+    const track = document.getElementById('carousel');
+    const scrollAmount = 600 * direction;
+    track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  }
+</script>

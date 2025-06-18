@@ -3,12 +3,12 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
-  <div class="about-container">
-    <h2 class="text-3xl font-bold mb-6 text-center">Qui sommes-nous ?</h2>
+  <div class="page-container">
+    <h1 class="page-title">Qui sommes-nous ?</h1>
 
-    <section class="about-section">
-      <h3>Les membres du bureau et du conseil d'administration :</h3>
-      <p>
+    <section class="content-section">
+      <h2 class="section-title">Les membres du bureau et du conseil d'administration :</h2>
+      <p class="content-text">
         Le Conseil d'Administration et le bureau sont constitués de membres
         bénévoles actifs et de retraités du secteur médical, paramédical et
         privé.
@@ -25,73 +25,74 @@ import Layout from "../layouts/Layout.astro";
       <img
         src="/membres.jpg"
         alt="Membres du bureau"
-        width="800"
-        height="533"
+        class="feature-image"
       />
     </section>
 
-    <section class="about-section">
-      <h3>Notre Animateur :</h3>
-      <div class="about-animateur">
-        <img src="/animateur.jpg" alt="Animateur" width="300" height="400" />
-        <p>
-          J'ai obtenu la certification d'animateur en gérontologie en juin 2014,
-          formation suivie à la MFR La Saillerie à Angers.
-          <br /><br />
-          Le rôle d'animateur consiste à proposer, élaborer, coordonner et réaliser
-          des activités adaptées aux besoins du public accueilli.
-          <br /><br />
-          Objectifs : maintenir les liens sociaux, capacités intellectuelles et physiques,
-          renforcer l'estime de soi et montrer aux personnes qu'elles ont encore
-          leur place dans la société.
-          <br /><br />
-          Un bon animateur doit faire preuve de sourire, dynamisme, authenticité,
-          empathie, bienveillance, curiosité, polyvalence, créativité et persévérance.
-        </p>
+    <section class="content-section">
+      <h2 class="section-title">Notre Animateur :</h2>
+      <div class="two-column-layout">
+        <img src="/animateur.jpg" alt="Animateur" class="profile-image" />
+        <div class="content-text">
+          <p>
+            J'ai obtenu la certification d'animateur en gérontologie en juin 2014,
+            formation suivie à la MFR La Saillerie à Angers.
+            <br /><br />
+            Le rôle d'animateur consiste à proposer, élaborer, coordonner et réaliser
+            des activités adaptées aux besoins du public accueilli.
+            <br /><br />
+            Objectifs : maintenir les liens sociaux, capacités intellectuelles et physiques,
+            renforcer l'estime de soi et montrer aux personnes qu'elles ont encore
+            leur place dans la société.
+            <br /><br />
+            Un bon animateur doit faire preuve de sourire, dynamisme, authenticité,
+            empathie, bienveillance, curiosité, polyvalence, créativité et persévérance.
+          </p>
+        </div>
       </div>
     </section>
 
-    <section class="about-section">
-      <h3>Nos bénévoles :</h3>
-      <p>
+    <section class="content-section">
+      <h2 class="section-title">Nos bénévoles :</h2>
+      <p class="content-text">
         Parce qu'ils ont une grande empathie pour les personnes âgées, des
         bénévoles ont choisi de rejoindre notre association. Ce groupe ne cesse
         de croître.
         <br /><br />
         Ils sont indispensables au bon déroulement des après-midis. Ils soutiennent
         les accueillis, accompagnent aux activités, mettent en place les espaces
-        et participent à l’écoute.
+        et participent à l'écoute.
         <br /><br />
-        Dix bénévoles ont suivi une formation à la relation d’aide dispensée par
+        Dix bénévoles ont suivi une formation à la relation d'aide dispensée par
         une psychologue spécialisée en gérontologie.
       </p>
 
-      <div class="about-testimonies">
-        <blockquote>
+      <div class="testimonials-grid">
+        <blockquote class="testimonial">
           « Cette formation nous a appris à faire un travail sur nous-mêmes pour
           mieux comprendre les autres. »
         </blockquote>
-        <blockquote>
+        <blockquote class="testimonial">
           « Très bénéfique, avec le recul, dans sa globalité. »
         </blockquote>
-        <blockquote>
+        <blockquote class="testimonial">
           « J'ai renforcé ma bienveillance et mon écoute. »
         </blockquote>
-        <blockquote>
+        <blockquote class="testimonial">
           « Elle m'a apporté de vrais outils pour accompagner avec humanité. »
         </blockquote>
-        <blockquote>
+        <blockquote class="testimonial">
           « Ces jours de formation nous ont permis de mieux comprendre le
           vieillissement. »
         </blockquote>
-        <blockquote>
+        <blockquote class="testimonial">
           « Super formation, elle donne sens à mon engagement bénévole. »
         </blockquote>
       </div>
 
-      <img src="/benevoles.jpg" alt="Bénévoles" width="800" height="533" />
+      <img src="/benevoles.jpg" alt="Bénévoles" class="feature-image" />
 
-      <p class="bold">
+      <p class="highlight-text">
         Claude, Françoise, Évelyne D., Patricia G., Dany, Monique, Annie,
         Faustine, Carole, Nadine R., Céline B., Marie-Christine, Patricia H.,
         Bénédicte et Nadine A.
@@ -99,88 +100,14 @@ import Layout from "../layouts/Layout.astro";
         (Évelyne V. et Céline F. absentes sur la photo).
       </p>
 
-      <p>
+      <p class="content-text">
         <strong>Le bénévolat vous attire ?</strong><br />
         Vous êtes sensible aux valeurs de notre association ? Vous souhaitez aider
         les autres, accompagner les personnes âgées et maintenir du lien social ?
         <br /><br />
-        <span class="call-to-action">Rejoignez-nous comme bénévole</span> pour 15 €/an
-        (adhésion déductible à 66 %).
+        <span class="call-to-action">Rejoignez-nous comme bénévole</span> pour 15 €/an
+        (adhésion déductible à 66 %).
       </p>
     </section>
   </div>
 </Layout>
-<style>
-  .about-container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
-  }
-
-  .about-section {
-    margin-bottom: 3rem;
-  }
-
-  .about-section h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-  }
-
-  .about-section p {
-    font-size: 1rem;
-    line-height: 1.7;
-    text-align: justify;
-    margin-bottom: 1rem;
-  }
-
-  .about-section img {
-    display: block;
-    margin: 1.5rem auto;
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-  }
-
-  .about-animateur {
-    display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
-    align-items: flex-start;
-  }
-
-  .about-animateur img {
-    flex: 0 0 300px;
-    border-radius: 8px;
-  }
-
-  .about-animateur p {
-    flex: 1;
-  }
-
-  .about-testimonies {
-    margin: 1rem 0;
-  }
-
-  .about-testimonies blockquote {
-    border-left: 4px solid var(--accent, #2337ff);
-    padding-left: 1rem;
-    margin: 1rem 0;
-    font-style: italic;
-    color: #444;
-  }
-
-  .bold {
-    font-weight: bold;
-    text-align: center;
-    margin-top: 1rem;
-  }
-
-  .call-to-action {
-    display: inline-block;
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: var(--accent, #2337ff);
-    margin-top: 1rem;
-  }
-</style>

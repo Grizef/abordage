@@ -3,54 +3,49 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
-  <div class="actions-container">
-    <h2 class="text-3xl font-bold mb-6 text-center">Nos actions</h2>
+  <div class="page-container">
+    <h1 class="page-title">Nos actions</h1>
 
-    <section class="actions-section">
-      <h3>Collecte :</h3>
-      <p>
-        Avec l’aide des bénévoles, des accueillis, de leurs proches et de
+    <section class="content-section">
+      <h2 class="section-title">Collecte :</h2>
+      <p class="content-text">
+        Avec l'aide des bénévoles, des accueillis, de leurs proches et de
         personnes extérieures, nous collectons toutes sortes de bouchons
         (plastique, liège, synthétique) ainsi que les couvercles souples en
         plastique.
         <br /><br />
-        Nous les remettons à l’association <strong>Opération Bouchons 72</strong
-        > du Grand-Lucé (Sarthe). Ces éléments sont recyclés, puis l’association
-        nous soutient financièrement pour l’achat de matériel : fauteuils, tables
+        Nous les remettons à l'association <strong>Opération Bouchons 72</strong>
+        du Grand-Lucé (Sarthe). Ces éléments sont recyclés, puis l'association
+        nous soutient financièrement pour l'achat de matériel : fauteuils, tables
         pour les sorties, jeux adaptés (Boccia, Tossit, Triomino géant, Qwirkle…).
       </p>
 
-      <img
-        src="/collecte.jpg"
-        alt="Remise du chèque"
-        width="800"
-        height="533"
-      />
-
-      <p class="caption">
-        Remise d’un chèque de soutien par l’Association « Opération Bouchons 72
-        »
-      </p>
+      <div class="image-with-caption">
+        <img src="/collecte.jpg" alt="Remise du chèque" class="feature-image" />
+        <p class="image-caption">
+          Remise d'un chèque de soutien par l'Association « Opération Bouchons 72 »
+        </p>
+      </div>
     </section>
 
-    <section class="actions-section">
-      <h3>Manifestations 2025 :</h3>
-      <ul>
+    <section class="content-section">
+      <h2 class="section-title">Manifestations 2025 :</h2>
+      <ul class="content-list">
         <li>
-          30–31 août : Randonnée caritative “Les 24 heures de Mayet” (9 boucles
-          au choix, organisée par Rand’Aune et Loir)
+          30–31 août : Randonnée caritative "Les 24 heures de Mayet" (9 boucles
+          au choix, organisée par Rand'Aune et Loir)
         </li>
         <li>14 septembre : Marché de Mayet – vente de crêpes et kits SOS</li>
         <li>Fin septembre : Vente de chocolats de Noël</li>
         <li>19 octobre : Fête de la pomme à Vaas</li>
-        <li>8 novembre : Repas dansant – Salle des fêtes d’Aubigné-Racan</li>
+        <li>8 novembre : Repas dansant – Salle des fêtes d'Aubigné-Racan</li>
         <li>14 décembre : Concert « Les Passantes » – St Jean de La Motte</li>
       </ul>
     </section>
 
-    <section class="actions-section">
-      <h3>Manifestations 2026 :</h3>
-      <ul>
+    <section class="content-section">
+      <h2 class="section-title">Manifestations 2026 :</h2>
+      <ul class="content-list">
         <li>22 février : Loto – salle à confirmer</li>
         <li>
           1er mars : Théâtre avec la troupe « Les Bolides » de Mulsanne – Salle
@@ -63,55 +58,3 @@ import Layout from "../layouts/Layout.astro";
     </section>
   </div>
 </Layout>
-<style>
-  .actions-container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
-  }
-
-  .actions-section {
-    margin-bottom: 3rem;
-  }
-
-  .actions-section h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: #111;
-  }
-
-  .actions-section p {
-    font-size: 1rem;
-    line-height: 1.7;
-    text-align: justify;
-    margin-bottom: 1rem;
-  }
-
-  .actions-section ul {
-    list-style-type: disc;
-    padding-left: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .actions-section li {
-    margin-bottom: 0.5rem;
-    line-height: 1.6;
-  }
-
-  .actions-section img {
-    display: block;
-    max-width: 100%;
-    height: auto;
-    margin: 1.5rem auto 0.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  }
-
-  .caption {
-    text-align: center;
-    font-style: italic;
-    font-size: 0.95rem;
-    color: #555;
-  }
-</style>

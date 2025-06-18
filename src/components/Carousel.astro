@@ -18,55 +18,6 @@ const images = [
 ];
 ---
 
-<style>
-.carousel-container {
-  text-align: center;
-}
-
-.carousel-track {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  gap: 1rem;
-  padding: 1rem;
-  margin-bottom: 1rem;
-
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.carousel-track::-webkit-scrollbar {
-  display: none;
-}
-.carousel-track img {
-  width: 180px;
-  flex-shrink: 0;
-  scroll-snap-align: center;
-  border-radius: 8px;
-  background: white;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-}
-
-.carousel-controls {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.carousel-button {
-  background: white;
-  border: 1px solid #ccc;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  font-size: 1.2rem;
-  border-radius: 6px;
-  transition: background 0.2s ease;
-}
-.carousel-button:hover {
-  background-color: #f1f1f1;
-}
-</style>
-
 <div class="carousel-container">
   <div class="carousel-track" id="carousel">
     {images.map(({ src, alt }) => (
@@ -78,6 +29,92 @@ const images = [
     <button class="carousel-button" onclick="scrollCarousel(1)">Suivant →</button>
   </div>
 </div>
+
+<style>
+.carousel-container {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.carousel-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+  /* Hide scrollbar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-track img {
+  width: 180px;
+  height: 80px;
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  border-radius: 6px;
+  background: white;
+  object-fit: contain;
+}
+
+.carousel-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.carousel-button {
+  background: white;
+  border: 1px solid rgb(var(--gray-light));
+  color: rgb(var(--gray-dark));
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.carousel-button:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .carousel-track img {
+    width: 140px;
+    height: 60px;
+  }
+  
+  .carousel-button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-track img {
+    width: 120px;
+    height: 50px;
+  }
+  
+  .carousel-button {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+  }
+}
+</style>
 
 <script is:inline>
   function scrollCarousel(direction) {

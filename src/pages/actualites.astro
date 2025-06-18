@@ -1,0 +1,508 @@
+---
+import Layout from "../layouts/Layout.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+
+// Simuler des actualités (à remplacer par un vrai système de contenu)
+const actualites = [
+  {
+    id: 1,
+    titre: "Nouveau partenariat avec la Banque Populaire",
+    date: new Date('2024-12-15'),
+    contenu: "Nous sommes ravis d'annoncer un nouveau partenariat avec la Banque Populaire qui nous permettra de développer nos activités dans le Sud-Sarthe.",
+    image: "/actualites/partenariat-bp.jpg",
+    categorie: "Partenariat"
+  },
+  {
+    id: 2,
+    titre: "Sortie à la mer réussie pour nos accueillis",
+    date: new Date('2024-12-10'),
+    contenu: "La sortie annuelle à Préfailles a été un véritable succès. Plus de 30 accueillis ont pu profiter d'une journée en bord de mer, pour certains c'était une première !",
+    image: "/actualites/sortie-mer.jpg",
+    categorie: "Sortie"
+  },
+  {
+    id: 3,
+    titre: "Formation des bénévoles en gérontologie",
+    date: new Date('2024-12-05'),
+    contenu: "Une nouvelle session de formation à la relation d'aide a été organisée pour nos bénévoles. Cette formation dispensée par une psychologue spécialisée en gérontologie permet d'améliorer l'accompagnement de nos accueillis.",
+    image: "/actualites/formation-benevoles.jpg",
+    categorie: "Formation"
+  },
+  {
+    id: 4,
+    titre: "Ouverture d'un nouvel espace d'accueil",
+    date: new Date('2024-11-28'),
+    contenu: "Nous avons le plaisir d'annoncer l'ouverture d'un nouvel espace d'accueil à Aubigné-Racan. Cet espace permettra d'accueillir 15 personnes supplémentaires.",
+    image: "/actualites/nouvel-espace.jpg",
+    categorie: "Développement"
+  },
+  {
+    id: 5,
+    titre: "Collecte de bouchons : bilan positif",
+    date: new Date('2024-11-20'),
+    contenu: "Notre collecte de bouchons en partenariat avec l'Association Opération Bouchons 72 a permis de récolter plus de 200kg de bouchons. Merci à tous les participants !",
+    image: "/actualites/collecte-bouchons.jpg",
+    categorie: "Collecte"
+  },
+  {
+    id: 6,
+    titre: "Fête de fin d'année 2024",
+    date: new Date('2024-11-15'),
+    contenu: "La fête de fin d'année s'est déroulée dans une ambiance chaleureuse. Plus de 80 personnes étaient présentes pour célébrer ensemble cette belle année d'activités.",
+    image: "/actualites/fete-fin-annee.jpg",
+    categorie: "Événement"
+  }
+];
+
+// Trier par date décroissante
+actualites.sort((a, b) => b.date.valueOf() - a.date.valueOf());
+---
+
+<Layout>
+  <div class="page-container">
+    <h1 class="page-title">Actualités</h1>
+    
+    <section class="content-section">
+      <p class="content-text">
+        Retrouvez ici toutes les actualités de l'association Abord'Âge Sud-Sarthe : 
+        nouveaux partenariats, événements, sorties, formations et bien plus encore.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <div class="actualites-grid">
+        {actualites.map((actualite) => (
+          <article class="actualite-card">
+            <div class="actualite-image">
+              <img src={actualite.image} alt={actualite.titre} loading="lazy" />
+              <span class="actualite-categorie">{actualite.categorie}</span>
+            </div>
+            <div class="actualite-content">
+              <h2 class="actualite-titre">{actualite.titre}</h2>
+              <p class="actualite-date">
+                <FormattedDate date={actualite.date} />
+              </p>
+              <p class="actualite-extrait">{actualite.contenu}</p>
+              <button class="btn-lire-plus" data-actualite-id={actualite.id}>
+                Lire la suite
+              </button>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- Modal pour afficher l'article complet -->
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <span class="modal-close">&times;</span>
+        <div id="modal-body"></div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+.actualites-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.actualite-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.actualite-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.actualite-image {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.actualite-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: 0;
+  border-radius: 0;
+}
+
+.actualite-categorie {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--accent);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.actualite-content {
+  padding: 1.5rem;
+}
+
+.actualite-titre {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: rgb(var(--black));
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+}
+
+.actualite-date {
+  color: rgb(var(--gray));
+  font-size: 0.9rem;
+  margin: 0 0 1rem 0;
+}
+
+.actualite-extrait {
+  color: rgb(var(--gray-dark));
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.btn-lire-plus {
+  background: transparent;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-lire-plus:hover {
+  background: var(--accent);
+  color: white;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background-color: white;
+  margin: 5% auto;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: rgb(var(--gray));
+  transition: color 0.2s ease;
+  z-index: 10;
+}
+
+.modal-close:hover {
+  color: rgb(var(--black));
+}
+
+.modal-actualite {
+  line-height: 1.7;
+}
+
+.modal-actualite h2 {
+  color: rgb(var(--black));
+  margin-bottom: 0.5rem;
+  font-size: 1.8rem;
+}
+
+.modal-actualite .modal-date {
+  color: rgb(var(--gray));
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+.modal-actualite img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.modal-actualite p {
+  margin-bottom: 1rem;
+  color: rgb(var(--gray-dark));
+}
+
+.modal-actualite ul {
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.modal-actualite li {
+  margin-bottom: 0.5rem;
+  color: rgb(var(--gray-dark));
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .actualites-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .actualite-image {
+    height: 150px;
+  }
+  
+  .modal-content {
+    margin: 10% auto;
+    padding: 1.5rem;
+    width: 95%;
+  }
+  
+  .modal-actualite h2 {
+    font-size: 1.5rem;
+  }
+}
+</style>
+
+<script>
+  // Données des actualités complètes
+  const actualitesCompletes = {
+    1: {
+      titre: "Nouveau partenariat avec la Banque Populaire",
+      date: "15 décembre 2024",
+      contenu: `
+        <p>Nous sommes ravis d'annoncer un nouveau partenariat avec la Banque Populaire qui nous permettra de développer nos activités dans le Sud-Sarthe.</p>
+        
+        <p>Ce partenariat s'inscrit dans le cadre de l'engagement social de la Banque Populaire et nous permettra de :</p>
+        <ul>
+          <li>Financer de nouveaux équipements pour nos espaces d'accueil</li>
+          <li>Organiser des sorties supplémentaires pour nos accueillis</li>
+          <li>Former davantage de bénévoles</li>
+          <li>Développer de nouvelles activités</li>
+        </ul>
+        
+        <p>Nous remercions chaleureusement la Banque Populaire pour sa confiance et son soutien dans notre mission d'accompagnement des personnes âgées.</p>
+        
+        <p>Ce partenariat renforce notre capacité à répondre aux besoins des personnes âgées isolées et contribue à notre objectif de prévention de la perte d'autonomie.</p>
+      `,
+      image: "/actualites/partenariat-bp.jpg"
+    },
+    2: {
+      titre: "Sortie à la mer réussie pour nos accueillis",
+      date: "10 décembre 2024",
+      contenu: `
+        <p>La sortie annuelle à Préfailles a été un véritable succès. Plus de 30 accueillis ont pu profiter d'une journée en bord de mer, pour certains c'était une première !</p>
+        
+        <p>Au programme de cette belle journée :</p>
+        <ul>
+          <li>Départ en minibus tôt le matin</li>
+          <li>Déjeuner au restaurant avec vue sur mer</li>
+          <li>Balade sur la côte et découverte du petit port</li>
+          <li>Goûter convivial avant le retour</li>
+        </ul>
+        
+        <p>Les retours sont unanimes : "C'était magnifique !", "J'ai adoré voir la mer", "Quelle belle journée entre amis". Ces moments de partage sont essentiels pour maintenir le lien social et créer des souvenirs précieux.</p>
+        
+        <p>Un grand merci à tous les bénévoles qui ont organisé et accompagné cette sortie, ainsi qu'à nos partenaires qui ont contribué à son financement.</p>
+        
+        <p>Cette sortie illustre parfaitement notre mission : permettre aux personnes âgées de sortir de leur isolement et de vivre des expériences enrichissantes en collectivité.</p>
+      `,
+      image: "/actualites/sortie-mer.jpg"
+    },
+    3: {
+      titre: "Formation des bénévoles en gérontologie",
+      date: "5 décembre 2024",
+      contenu: `
+        <p>Une nouvelle session de formation à la relation d'aide a été organisée pour nos bénévoles. Cette formation dispensée par une psychologue spécialisée en gérontologie permet d'améliorer l'accompagnement de nos accueillis.</p>
+        
+        <p>Au programme de cette formation :</p>
+        <ul>
+          <li>Comprendre les spécificités du vieillissement</li>
+          <li>Développer l'écoute active et l'empathie</li>
+          <li>Gérer les situations difficiles</li>
+          <li>Maintenir une posture bienveillante</li>
+          <li>Travailler sur soi pour mieux accompagner les autres</li>
+        </ul>
+        
+        <p>Cette formation s'inscrit dans notre démarche d'amélioration continue de la qualité de nos services. Nos bénévoles sont notre richesse et nous tenons à leur offrir les outils nécessaires pour exercer leur mission dans les meilleures conditions.</p>
+        
+        <p>Les retours des participants sont très positifs : "Cette formation m'a apporté de vrais outils pour accompagner avec humanité", "J'ai renforcé ma bienveillance et mon écoute", "Super formation, elle donne sens à mon engagement bénévole".</p>
+      `,
+      image: "/actualites/formation-benevoles.jpg"
+    },
+    4: {
+      titre: "Ouverture d'un nouvel espace d'accueil",
+      date: "28 novembre 2024",
+      contenu: `
+        <p>Nous avons le plaisir d'annoncer l'ouverture d'un nouvel espace d'accueil à Aubigné-Racan. Cet espace permettra d'accueillir 15 personnes supplémentaires.</p>
+        
+        <p>Ce nouvel espace s'inscrit dans notre développement territorial et répond à une demande croissante dans cette zone. Il sera ouvert tous les vendredis après-midi de 14h à 17h.</p>
+        
+        <p>L'équipe d'animation sera composée de :</p>
+        <ul>
+          <li>Laurent, notre animateur en gérontologie</li>
+          <li>Une équipe de bénévoles formés</li>
+          <li>Des intervenants ponctuels selon les activités</li>
+        </ul>
+        
+        <p>Les activités proposées seront identiques à celles des autres espaces : activités mémoire, manuelles, pâtisseries, jeux de société, sorties, etc.</p>
+        
+        <p>Pour toute information ou inscription, contactez-nous au 07 83 59 18 54 ou par email à abordage.sudsarthe@gmail.com</p>
+        
+        <p>Nous remercions la mairie d'Aubigné-Racan pour son soutien dans ce projet.</p>
+      `,
+      image: "/actualites/nouvel-espace.jpg"
+    },
+    5: {
+      titre: "Collecte de bouchons : bilan positif",
+      date: "20 novembre 2024",
+      contenu: `
+        <p>Notre collecte de bouchons en partenariat avec l'Association Opération Bouchons 72 a permis de récolter plus de 200kg de bouchons. Merci à tous les participants !</p>
+        
+        <p>Cette collecte a mobilisé :</p>
+        <ul>
+          <li>Nos accueillis et leurs familles</li>
+          <li>Nos bénévoles</li>
+          <li>Les habitants des communes partenaires</li>
+          <li>Les commerces locaux</li>
+        </ul>
+        
+        <p>Les bouchons collectés sont :</p>
+        <ul>
+          <li>Bouchons en plastique (bouteilles d'eau, sodas, etc.)</li>
+          <li>Bouchons en liège (bouteilles de vin)</li>
+          <li>Bouchons synthétiques (produits ménagers)</li>
+          <li>Couvercles souples en plastique</li>
+        </ul>
+        
+        <p>Grâce à cette collecte, l'Association Opération Bouchons 72 nous a remis un chèque de soutien qui nous permettra d'acheter :</p>
+        <ul>
+          <li>Des fauteuils pour nos espaces d'accueil</li>
+          <li>Des tables pour les sorties en extérieur</li>
+          <li>Des jeux adaptés (Boccia, Tossit, Triomino géant, Qwirkle)</li>
+        </ul>
+        
+        <p>La collecte continue ! Vous pouvez déposer vos bouchons dans nos espaces d'accueil ou nous contacter pour organiser un point de collecte.</p>
+      `,
+      image: "/actualites/collecte-bouchons.jpg"
+    },
+    6: {
+      titre: "Fête de fin d'année 2024",
+      date: "15 novembre 2024",
+      contenu: `
+        <p>La fête de fin d'année s'est déroulée dans une ambiance chaleureuse. Plus de 80 personnes étaient présentes pour célébrer ensemble cette belle année d'activités.</p>
+        
+        <p>Au programme de cette soirée :</p>
+        <ul>
+          <li>Apéritif convivial</li>
+          <li>Repas partagé préparé par nos accueillis</li>
+          <li>Spectacle musical avec les "Passantes"</li>
+          <li>Remise de diplômes aux bénévoles</li>
+          <li>Tombola avec de nombreux lots</li>
+        </ul>
+        
+        <p>Cette soirée a été l'occasion de :</p>
+        <ul>
+          <li>Revoir tous les accueillis et leurs familles</li>
+          <li>Remercier nos bénévoles pour leur engagement</li>
+          <li>Présenter le bilan de l'année 2024</li>
+          <li>Annoncer les projets pour 2025</li>
+        </ul>
+        
+        <p>Nous remercions tous les participants, les artistes, les donateurs de lots pour la tombola, et tous ceux qui ont contribué à la réussite de cette soirée.</p>
+        
+        <p>Cette fête illustre parfaitement l'esprit de notre association : convivialité, partage, bienveillance et solidarité.</p>
+      `,
+      image: "/actualites/fete-fin-annee.jpg"
+    }
+  };
+
+  // Fonction pour ouvrir la modal avec l'article complet
+  function ouvrirModal(id) {
+    const actualite = actualitesCompletes[id];
+    if (!actualite) return;
+
+    const modal = document.getElementById('modal');
+    const modalBody = document.getElementById('modal-body');
+    
+    modalBody.innerHTML = `
+      <div class="modal-actualite">
+        <img src="${actualite.image}" alt="${actualite.titre}">
+        <h2>${actualite.titre}</h2>
+        <p class="modal-date">${actualite.date}</p>
+        <div>${actualite.contenu}</div>
+      </div>
+    `;
+    
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Empêcher le scroll de la page
+  }
+
+  // Fonction pour fermer la modal
+  function fermerModal() {
+    const modal = document.getElementById('modal');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto'; // Réactiver le scroll de la page
+  }
+
+  // Initialisation des événements
+  document.addEventListener('DOMContentLoaded', () => {
+    // Ajouter les événements aux boutons "Lire la suite"
+    document.querySelectorAll('.btn-lire-plus').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const actualiteId = parseInt(e.target.getAttribute('data-actualite-id'));
+        ouvrirModal(actualiteId);
+      });
+    });
+
+    // Fermer la modal avec le bouton X
+    document.querySelector('.modal-close').addEventListener('click', fermerModal);
+
+    // Fermer la modal en cliquant à l'extérieur
+    document.getElementById('modal').addEventListener('click', (event) => {
+      if (event.target.id === 'modal') {
+        fermerModal();
+      }
+    });
+
+    // Fermer la modal avec la touche Échap
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        fermerModal();
+      }
+    });
+  });
+</script> 

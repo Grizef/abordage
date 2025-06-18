@@ -3,61 +3,57 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
-  <h2 class="text-2xl font-bold mb-4">Nos actions</h2>
-  <div class="col">
-    <div class="row">
-      <h3>Collecte :</h3>
-      <p>
-        Avec l'aide des bénévoles, des accueillis, de leurs proches, de
+  <div class="page-container">
+    <h1 class="page-title">Événements et Actions</h1>
+    
+    <section class="content-section">
+      <h2 class="section-title">Collecte de bouchons</h2>
+      <p class="content-text">
+        Avec l'aide des bénévoles, des accueillis, de leurs proches et de
         personnes extérieures, nous collectons toutes sortes de bouchons
-        (plastique, liège, synthétique) et les couvercles souples en plastique.
-        Nous les remettons à l'Association « Opération Bouchons 72 » du
-        Grand-Lucé (Sarthe). Ces bouchons et couvercles sont ensuite recyclés,
-        puis l'association nous aide à financer des achats tel que : des
-        fauteuils et des tables pour les sorties en extérieures, mais également
-        des jeux de société adaptés à nos accueillis (Boccia, Tossit, Triomino
-        géant, Qwirkle).
+        (plastique, liège, synthétique) ainsi que les couvercles souples en
+        plastique.
+        <br /><br />
+        Nous les remettons à l'association <strong>Opération Bouchons 72</strong>
+        du Grand-Lucé (Sarthe). Ces éléments sont recyclés, puis l'association
+        nous soutient financièrement pour l'achat de matériel : fauteuils, tables
+        pour les sorties, jeux adaptés (Boccia, Tossit, Triomino géant, Qwirkle…).
       </p>
-      <img src="/collecte.jpg" alt="Remise du chèque" />
-      <p>
-        Remise d'un chèque de soutien par l'Association « Opération Bouchons 72
-        »
-      </p>
-    </div>
-    <div class="row">
-      <h3>Manifestations 2025 :</h3>
-      <ul>
+      <div class="image-with-caption">
+        <img src="/collecte.jpg" alt="Remise du chèque" class="feature-image" />
+        <p class="image-caption">
+          Remise d'un chèque de soutien par l'Association « Opération Bouchons 72 »
+        </p>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h2 class="section-title">Manifestations 2025</h2>
+      <ul class="content-list">
         <li>
-          Randonnée caritative les 24 heures de Mayet les 30 et 31 août 2025, 9
-          boucles au choix (Organisée par l'Association Rand'Aune et Loir de
-          Mayet)
+          30–31 août : Randonnée caritative "Les 24 heures de Mayet" (9 boucles
+          au choix, organisée par Rand'Aune et Loir)
+        </li>
+        <li>14 septembre : Marché de Mayet – vente de crêpes et kits SOS</li>
+        <li>Fin septembre : Vente de chocolats de Noël</li>
+        <li>19 octobre : Fête de la pomme à Vaas</li>
+        <li>8 novembre : Repas dansant – Salle des fêtes d'Aubigné-Racan</li>
+        <li>14 décembre : Concert « Les Passantes » – St Jean de La Motte</li>
+      </ul>
+    </section>
+
+    <section class="content-section">
+      <h2 class="section-title">Manifestations 2026</h2>
+      <ul class="content-list">
+        <li>22 février : Loto – salle à confirmer</li>
+        <li>
+          1er mars : Théâtre avec la troupe « Les Bolides » de Mulsanne – Salle
+          des fêtes de Mayet
         </li>
         <li>
-          Dimanche 14 septembre marché de Mayet : Vente de crêpes, kits SOS,.
-        </li>
-        <li>Vente de chocolats de Noël (fin septembre)</li>
-        <li>Dimanche 19 octobre : Fête de la pomme Vaas</li>
-        <li>
-          Samedi 8 novembre : Repas dansant (Salle des fêtes)Aubigné-Racan
-        </li>
-        <li>
-          Dimanche 14 décembre : Concert « Les Passantes » St Jean de La Motte
+          18 avril : Repas dansant avec DJ Steph – Salle des fêtes Aubigné-Racan
         </li>
       </ul>
-    </div>
-    <div class="row">
-      <h3>Manifestations 2026 :</h3>
-      <ul>
-        <li>Loto 22 février 2026 salle ?</li>
-        <li>
-          Théâtre avec la troupe « Les Bolides » de Mulsanne : 1er mars 2026
-          salle des fêtes de MAYET
-        </li>
-        <li>
-          Samedi 18 avril 2026 (Dj Steph) : Repas dansant (Salle des fêtes)
-          Aubigné-Racan.
-        </li>
-      </ul>
-    </div>
+    </section>
   </div>
 </Layout>

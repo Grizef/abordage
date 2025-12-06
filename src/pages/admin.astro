@@ -1,0 +1,426 @@
+---
+
+---
+
+<!-- Page Admin Astro avec connexion et formulaire d'actualité connecté à l'API et éditeur QuillJS -->
+<html lang="fr">
+  <head>
+    <title>Admin Actualités</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: 'Atkinson', Arial, sans-serif;
+        background: #f7f8fa;
+        margin: 0;
+      }
+      .center {
+        max-width: 920px;
+        margin: 3rem auto;
+      }
+      .admin-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 920px;
+        margin: 1.5rem auto 0 auto;
+        padding: 0 1rem;
+      }
+      .brand {
+        display:flex;
+        align-items:center;
+        gap:0.8rem;
+      }
+      .brand img { height:36px }
+      .back-btn {
+        background: transparent;
+        border: 1px solid var(--accent, #0077cc);
+        color: var(--accent, #0077cc);
+        padding: 0.5rem 0.9rem;
+        border-radius: 0.6rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .back-btn:hover { background: rgba(0,0,0,0.03) }
+      .logout-btn {
+        background: #e74c3c;
+        border: none;
+        color: #fff;
+        padding: 0.45rem 0.8rem;
+        border-radius: 0.6rem;
+        margin-left: 0.6rem;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .logout-btn:hover { opacity: 0.95 }
+      .dashboard-hero {
+        background: linear-gradient(90deg, #f5fbff, #ffffff);
+        border: 1px solid rgba(0,119,204,0.06);
+        padding: 1.1rem 1.4rem;
+        margin: 1.2rem 0 1.6rem 0;
+        border-radius: 1rem;
+        box-shadow: 0 1px 8px rgba(0,120,200,0.03);
+      }
+      .admin-card {
+        background: #fff;
+        border-radius: 1.2rem;
+        box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+        padding: 2.5rem 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      .admin-grid {
+        display: grid;
+        grid-template-columns: 1fr 420px;
+        gap: 1.6rem;
+        align-items: start;
+      }
+      @media (max-width: 920px) {
+        .admin-grid { grid-template-columns: 1fr; }
+      }
+      .admin-left, .admin-right { display: block; }
+      .section-title { font-size: 1.15rem; margin-bottom: 0.6rem; font-weight:700 }
+      .divider { height:1px; background:#eee; margin:1rem 0 1.2rem 0; border-radius:2px }
+      .admin-news-item { align-items:flex-start }
+      .admin-news-actions button { padding: 0.35rem 0.7rem; font-size:0.95rem }
+      .form-group {
+        margin-bottom: 1.2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      h2 {
+        text-align: center;
+        font-size: 1.5rem;
+        margin-bottom: 1.2rem;
+        color: var(--accent, #0077cc);
+      }
+      input, textarea {
+        width: 100%;
+        margin-bottom: 1rem;
+        padding: 0.7rem 1rem;
+        border-radius: 0.6rem;
+        border: 1px solid #e0e0e0;
+        font-size: 1rem;
+        background: #f7f8fa;
+        transition: border-color 0.2s;
+      }
+      input:focus, textarea:focus {
+        border-color: var(--accent, #0077cc);
+        outline: none;
+      }
+      button {
+        padding: 0.7rem 1.5rem;
+        background: var(--accent, #0077cc);
+        color: #fff;
+        border: none;
+        border-radius: 0.6rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        transition: background 0.2s;
+      }
+      button:hover {
+        background: #005fa3;
+      }
+      #editor {
+        height: 220px;
+        margin-bottom: 1rem;
+        background: #f7f8fa;
+        border-radius: 0.6rem;
+        border: 1px solid #e0e0e0;
+      }
+      .admin-message {
+        text-align: center;
+        font-size: 1.05rem;
+        margin-top: 1rem;
+      }
+      #error {
+        text-align: center;
+        font-size: 1rem;
+        margin-top: 0.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="admin-header">
+      <div class="brand">
+        <img src="/logo.png" alt="Logo" />
+        <div style="font-weight:700;">Abordage — Admin</div>
+      </div>
+      <div>
+        <a href="/" class="back-btn" id="home-link">Retour à l'accueil</a>
+      </div>
+    </header>
+    <div id="admin-app" class="center"></div>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  <script>
+  // @ts-nocheck
+  /* global Quill */
+  /** @type {any} */
+  const W = /** @type {any} */ (window);
+      // Persisted admin flag so dev-server reloads don't drop the client-side login
+      let isAuthenticated = false;
+      let error = "";
+      function setAuth() {
+        try { W.localStorage.setItem('ab_admin', '1'); } catch (e) {}
+        try { document.cookie = 'ab_admin=1; path=/; SameSite=Lax'; } catch (e) {}
+        isAuthenticated = true;
+      }
+      function clearAuth() {
+        try { W.localStorage.removeItem('ab_admin'); } catch (e) {}
+        try { document.cookie = 'ab_admin=; Max-Age=0; path=/; SameSite=Lax'; } catch (e) {}
+        isAuthenticated = false;
+      }
+      try {
+        const saved = (W.localStorage && W.localStorage.getItem ? W.localStorage.getItem('ab_admin') : null) || (document.cookie && document.cookie.includes('ab_admin=1') ? '1' : null);
+        if (saved === '1') isAuthenticated = true;
+      } catch (e) {
+        // ignore (e.g. privacy modes)
+      }
+      function renderLogin() {
+        const adminApp = document.getElementById("admin-app");
+        if (!adminApp) return;
+        adminApp.innerHTML = `
+          <div class='admin-card'>
+            <form id='login-form'>
+              <h2>Connexion Admin</h2>
+              <div class='form-group'>
+                <input type='password' id='password' placeholder='Mot de passe' required />
+              </div>
+              <div class='form-group'>
+                <button type='submit'>Se connecter</button>
+              </div>
+              <div class='form-group'>
+                <p id='error' style='color:red;'>${error}</p>
+              </div>
+            </form>
+          </div>
+        `;
+        const loginForm = document.getElementById("login-form");
+        if (!loginForm) return;
+        loginForm.onsubmit = function (e) {
+          e.preventDefault();
+          const pwdInput = document.getElementById("password");
+          if (!pwdInput || !(pwdInput instanceof HTMLInputElement)) return;
+          const pwd = pwdInput.value;
+          if (pwd === "mdp") {
+            setAuth();
+            error = "";
+            renderAdmin();
+          } else {
+            error = "Mot de passe incorrect";
+            renderLogin();
+          }
+        };
+      }
+      /** @param {string} text */
+      const slugify = (text) => {
+        if (typeof text !== 'string') text = String(text || '');
+        return text
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/(^-|-$)/g, "");
+      };
+  async function renderAdmin() {
+        const adminApp = document.getElementById("admin-app");
+        if (!adminApp) return;
+        // Actualités existantes — fetch dynamique depuis le serveur
+        W.quill = W.quill || null;
+        W.currentEditSlug = W.currentEditSlug || null;
+        let actualites = [];
+        try {
+          const res = await fetch('/api/lister-actualites');
+          const json = await res.json();
+          if (json.success) actualites = json.list;
+        } catch (err) {
+          console.warn('Impossible de récupérer les actualités', err);
+        }
+        let actualitesHtml = `<div class='admin-card' style='margin-bottom:2rem;'>
+          <h2>Actualités existantes</h2>
+          <div class='admin-news-list'>`;
+        actualites.forEach(actu => {
+          actualitesHtml += `
+            <div class='admin-news-item' data-slug='${actu.slug}'>
+              <div>
+                <strong>${actu.title}</strong> <span style='color:#888;'>(${actu.publishDate})</span><br>
+                <span style='font-size:0.95em;'>${actu.description}</span>
+              </div>
+              <div class='admin-news-actions'>
+                <button class='edit-btn' data-slug='${actu.slug}'>Modifier</button>
+                <button class='delete-btn' data-slug='${actu.slug}'>Supprimer</button>
+              </div>
+            </div>`;
+        });
+        actualitesHtml += `</div></div>`;
+        adminApp.innerHTML = `
+          <div class='admin-grid'>
+            <div class='admin-left'>${actualitesHtml}</div>
+            <aside class='admin-right'>
+              <div class='admin-card'>
+                <h2 class='section-title'>Écrire une nouvelle actualité</h2>
+                <div class='divider'></div>
+                <form id='news-form'>
+                  <div class='form-group'>
+                    <input type='text' id='titre' placeholder='Titre' required />
+                  </div>
+                  <div class='form-group'>
+                    <input type='text' id='description' placeholder='Description courte' required />
+                  </div>
+                  <div class='form-group'>
+                    <div id='editor'></div>
+                  </div>
+                  <div class='form-group'>
+                    <button type='submit'>Publier</button>
+                  </div>
+                </form>
+                <div class='form-group'>
+                  <p id='news-message' class='admin-message' style='color:green;'></p>
+                </div>
+              </div>
+            </aside>
+          </div>
+        `;
+        // Gestion suppression
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+          btn.addEventListener('click', async function() {
+            const slug = btn.getAttribute('data-slug');
+            const item = document.querySelector(`.admin-news-item[data-slug='${slug}']`);
+            if (!confirm('Confirmer la suppression ?')) return;
+            // Appel API pour suppression réelle
+            try {
+              const res = await fetch('/api/supprimer-actualite', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ slug })
+              });
+              const j = await res.json();
+              if (j.success) {
+                if (item) item.remove();
+                setAuth();
+              } else {
+                alert(j.error || 'Erreur lors de la suppression');
+              }
+            } catch (err) {
+              alert('Erreur lors de la suppression côté serveur');
+            }
+          });
+        });
+        // Gestion modification (récupère le contenu complet depuis le serveur)
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+          btn.addEventListener('click', async function() {
+            const slug = btn.getAttribute('data-slug');
+            try {
+              const res = await fetch('/api/get-actualite', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ slug })
+              });
+              const j = await res.json();
+              if (!j.success) return alert('Impossible de charger l\'actualité');
+              const fm = j.frontmatter || {};
+              const content = j.content || '';
+              const titreInput = document.getElementById('titre');
+              const descInput = document.getElementById('description');
+              if (titreInput && titreInput instanceof HTMLInputElement) titreInput.value = fm.title || '';
+              if (descInput && descInput instanceof HTMLInputElement) descInput.value = fm.description || '';
+              // Pré-remplir le contenu dans l'éditeur
+              if (W.quill) W.quill.root.innerHTML = content;
+              W.currentEditSlug = slug;
+              // Scroll to form
+              const node = document.getElementById('titre');
+              if (node && node.scrollIntoView) node.scrollIntoView({ behavior: 'smooth' });
+            } catch (err) {
+              alert('Erreur lors du chargement de l\'actualité');
+            }
+          });
+        });
+        const editorDiv = document.getElementById("editor");
+        if (!editorDiv) return;
+  // safe Quill constructor (avoid TS "Cannot find name 'Quill'" errors)
+  /** @type {any} */
+  const QuillCtor = W.Quill || (typeof W.Quill !== 'undefined' ? W.Quill : null);
+  if (!QuillCtor) {
+    // If Quill isn't available yet, try later
+    setTimeout(renderAdmin, 250);
+    return;
+  }
+  W.quill = W.quill || new QuillCtor("#editor", {
+    modules: {
+      toolbar: [
+        [{ header: [1, 2, false] }],
+        ["bold", "italic", "underline"],
+        ["image", "code-block"],
+      ],
+    },
+    theme: "snow",
+  });
+        const newsForm = document.getElementById('news-form');
+        if (!newsForm) return;
+        newsForm.onsubmit = async function(e) {
+          e.preventDefault();
+          const titleInput = document.getElementById('titre');
+          const descInput = document.getElementById('description');
+          if (!titleInput || !(titleInput instanceof HTMLInputElement)) return;
+          if (!descInput || !(descInput instanceof HTMLInputElement)) return;
+          const title = titleInput.value;
+          const description = descInput.value;
+          const contenu = W.quill.root.innerHTML;
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = contenu;
+          const plainText = tempDiv.textContent || tempDiv.innerText || '';
+          const autoDescription = (plainText.substring(0, 150).trim() || description).trim() + (plainText.length > 150 ? '…' : '');
+          const publishDate = new Date().toISOString().split('T')[0];
+          const editSlug = W.currentEditSlug;
+          try {
+            let res, result;
+            if (editSlug) {
+              // Modification
+              res = await fetch('/api/modifier-actualite', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ slug: editSlug, title, description: autoDescription, contenu, publishDate })
+              });
+              W.currentEditSlug = null;
+            } else {
+              // Création
+              res = await fetch('/api/ajouter-actualite', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, description: autoDescription, contenu, publishDate })
+              });
+            }
+            result = await res.json();
+            const newsMsg = document.getElementById('news-message');
+            if (newsMsg) {
+                if (result.success) {
+                  newsMsg.innerText = editSlug ? 'Actualité modifiée !' : 'Actualité publiée !';
+                  try { if (newsForm.reset) newsForm.reset(); } catch (e) {}
+                  try { if (W.quill && W.quill.setContents) W.quill.setContents([]); } catch (e) {}
+                  setAuth();
+                  // reload admin to refresh the list
+                  setTimeout(() => renderAdmin(), 400);
+                } else {
+                  newsMsg.innerText = result.error || 'Erreur inconnue.';
+                }
+            }
+          } catch (err) {
+            const newsMsg = document.getElementById('news-message');
+            if (newsMsg) newsMsg.innerText = 'Erreur réseau ou serveur.';
+          }
+        };
+      }
+      if (!isAuthenticated) {
+        renderLogin();
+      } else {
+        renderAdmin();
+      }
+    </script>
+  </body>
+</html>

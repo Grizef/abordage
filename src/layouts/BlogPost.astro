@@ -1,18 +1,33 @@
 ---
-import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
-
-type Props = CollectionEntry<'blog'>['data'];
+import { SITE_URL, ORG_NAME } from '../consts';
 
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const _astroUrl = (Astro as any).url;
+const pageUrl = _astroUrl ? new URL(String(_astroUrl), SITE_URL).toString() : SITE_URL;
 ---
 
-<html lang="en">
+<html lang="fr">
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead title={title} description={description} image={heroImage || '/blog-placeholder-1.jpg'} canonical={pageUrl} />
+		<script type="application/ld+json">{
+			"@context": "https://schema.org",
+			"@type": "Article",
+			"mainEntityOfPage": {
+				"@type": "WebPage",
+				"@id": "${pageUrl}"
+			},
+			"headline": "${title}",
+			"description": "${description}",
+			"image": ["${heroImage || '/blog-placeholder-1.jpg'}"],
+			"author": { "@type": "Organization", "name": "${ORG_NAME}" },
+			"publisher": { "@type": "Organization", "name": "${ORG_NAME}", "logo": { "@type": "ImageObject", "url": "${SITE_URL}/logo.png" } },
+			"datePublished": "${pubDate}",
+			"dateModified": "${updatedDate || pubDate}"
+		}</script>
 		<style>
 			main {
 				width: calc(100% - 2em);
@@ -68,7 +83,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 							{
 								updatedDate && (
 									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
+										Dernière mise à jour le <FormattedDate date={updatedDate} />
 									</div>
 								)
 							}

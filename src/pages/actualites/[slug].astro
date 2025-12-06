@@ -1,0 +1,63 @@
+---
+
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import readingTime from 'reading-time';
+import Layout from '../../layouts/Layout.astro';
+
+export const prerender = true;
+
+
+export async function getStaticPaths() {
+  const actualites = (await getCollection('actualites')) as CollectionEntry<'actualites'>[];
+  return actualites.map((a) => ({
+    params: { slug: a.data.slug },
+    props: { actualite: a },
+  }));
+}
+
+
+const { actualite } = Astro.props as { actualite: CollectionEntry<'actualites'> };
+const data = actualite.data as {
+  title: string;
+  slug: string;
+  description: string;
+  publishDate: string | Date;
+};
+const { title, slug, description, publishDate } = data;
+const readingTimeEstimate = actualite.body ? readingTime(actualite.body).text : '';
+const permalink = `${Astro.site?.href ?? '/'}actualites/${slug}`;
+const { Content } = await render(actualite);
+---
+
+<Layout title={title} description={description} permalink={permalink}>
+  <header>
+    <h1>{title}</h1>
+    <hr />
+  </header>
+  <div class="container">
+    <article class="content">
+      <Content />
+    </article>
+    <hr />
+  </div>
+</Layout>
+
+<style>
+  header {
+    text-align: center;
+  }
+  header h1 {
+    margin-bottom: 0.7em;
+  }
+  header p {
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-family: var(--font-family-sans);
+    font-weight: 600;
+  }
+  header hr {
+    min-width: 100px;
+    width: 30%;
+  }
+</style>

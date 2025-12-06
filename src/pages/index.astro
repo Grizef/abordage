@@ -2,9 +2,13 @@
 import Layout from "../layouts/Layout.astro";
 import Carousel from "../components/Carousel.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+
+const title = SITE_TITLE;
+const description = SITE_DESCRIPTION;
+const permalink = '/';
 ---
 
-<Layout>
+<Layout title={title} description={description} permalink={permalink}>
   <div class="page-container">
     <h1 class="page-title">Bienvenue chez Abord'Âge Sud-Sarthe</h1>
     

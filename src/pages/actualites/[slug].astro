@@ -1,43 +1,39 @@
 ---
-
-import type { CollectionEntry } from 'astro:content';
-import { getCollection, render } from 'astro:content';
-import readingTime from 'reading-time';
+import { supabase } from '../../lib/supabase';
 import Layout from '../../layouts/Layout.astro';
 
-export const prerender = true;
+export const prerender = false;
 
+const { slug } = Astro.params;
 
-export async function getStaticPaths() {
-  const actualites = (await getCollection('actualites')) as CollectionEntry<'actualites'>[];
-  return actualites.map((a) => ({
-    params: { slug: a.data.slug },
-    props: { actualite: a },
-  }));
+if (!slug) {
+  return Astro.redirect('/actualites');
 }
 
+const { data: actualite, error } = await supabase
+  .from('news')
+  .select('*')
+  .eq('slug', slug)
+  .single();
 
-const { actualite } = Astro.props as { actualite: CollectionEntry<'actualites'> };
-const data = actualite.data as {
-  title: string;
-  slug: string;
-  description: string;
-  publishDate: string | Date;
-};
-const { title, slug, description, publishDate } = data;
-const readingTimeEstimate = actualite.body ? readingTime(actualite.body).text : '';
+if (error || !actualite) {
+  console.error('Actualité non trouvée:', error);
+  return Astro.redirect('/actualites');
+}
+
+const { title, description, content_html, publish_date } = actualite;
 const permalink = `${Astro.site?.href ?? '/'}actualites/${slug}`;
-const { Content } = await render(actualite);
 ---
 
 <Layout title={title} description={description} permalink={permalink}>
   <header>
     <h1>{title}</h1>
+    <p>{new Date(publish_date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
     <hr />
   </header>
   <div class="container">
     <article class="content">
-      <Content />
+      <div set:html={content_html} />
     </article>
     <hr />
   </div>

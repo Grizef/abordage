@@ -1,30 +1,34 @@
 ---
-
-import type { CollectionEntry } from 'astro:content';
-import { getCollection } from 'astro:content';
+import { supabase } from '../lib/supabase';
 import Layout from '../layouts/Layout.astro';
 
 const title = 'Actualités';
 const description = 'Toutes les actualités';
 const permalink = '/actualites';
 
-let allNews = (await getCollection('actualites')) as CollectionEntry<'actualites'>[];
-allNews = allNews.sort((a, b) => new Date((b.data as any).publishDate).valueOf() - new Date((a.data as any).publishDate).valueOf());
+const { data: allNews, error } = await supabase
+  .from('news')
+  .select('slug, title, description, publish_date')
+  .order('publish_date', { ascending: false });
+
+if (error) {
+  console.error('Erreur Supabase:', error);
+}
 ---
 
 <Layout title={title} description={description} permalink={permalink}>
   <div class="container">
     <h1>Actualités</h1>
     <div class="news-grid">
-      {allNews.map((post: CollectionEntry<'actualites'>) => (
+      {allNews && allNews.map((post) => (
         <div class="news-card">
           <div class="news-card-header">
             <h2>
-              <a href={`/actualites/${(post.data as any).slug}`}>{(post.data as any).title}</a>
+              <a href={`/actualites/${post.slug}`}>{post.title}</a>
             </h2>
-            <span class="news-date">{new Date((post.data as any).publishDate).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+            <span class="news-date">{new Date(post.publish_date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
           </div>
-          <p class="news-description">{(post.data as any).description}</p>
+          <p class="news-description">{post.description}</p>
         </div>
       ))}
     </div>

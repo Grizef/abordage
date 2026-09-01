@@ -1,0 +1,50 @@
+# Stack de monitoring pour l'infrastructure Abord'Âge Sud-Sarthe.
+# À déployer sur le serveur Oracle Cloud, à côté du site.
+#
+#   cd monitoring
+#   cp .env.example .env      # puis renseigner BESZEL_KEY après la 1re connexion au hub
+#   docker compose up -d
+#
+# Les services n'écoutent que sur 127.0.0.1 : c'est le reverse proxy
+# (nginx / Caddy) qui les expose en HTTPS sur des sous-domaines dédiés.
+# Voir README.md pour les détails (pare-feu Oracle, proxy, notifications).
+
+services:
+  # Surveillance de disponibilité : site, routes /api, certificat SSL, endpoint Supabase.
+  # Interface web + PWA installable sur mobile + notifications push.
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: uptime-kuma
+    restart: unless-stopped
+    volumes:
+      - uptime-kuma:/app/data
+    ports:
+      - "127.0.0.1:3001:3001"
+
+  # Métriques serveur : CPU, RAM, disque, réseau, conteneurs Docker.
+  # Interface web + PWA + alertes (email / ntfy / Telegram via shoutrrr).
+  beszel:
+    image: henrygd/beszel:latest
+    container_name: beszel
+    restart: unless-stopped
+    volumes:
+      - beszel_data:/beszel_data
+    ports:
+      - "127.0.0.1:8090:8090"
+
+  # Agent Beszel : lit les métriques de l'hôte et les expose au hub.
+  # network_mode: host pour voir les vraies interfaces réseau de la machine.
+  beszel-agent:
+    image: henrygd/beszel-agent:latest
+    container_name: beszel-agent
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      LISTEN: 45876
+      KEY: "${BESZEL_KEY}"
+
+volumes:
+  uptime-kuma:
+  beszel_data:

@@ -29,23 +29,8 @@ function rateLimited(request: Request): boolean {
 }
 
 function securityHeaders(headers: Headers): void {
-  headers.set(
-    "Content-Security-Policy",
-    [
-      "default-src 'self'",
-      // 'unsafe-inline' scripts et les CDN restent nécessaires pour /admin
-      // (QuillJS). À retirer une fois l'admin entièrement bundélisé.
-      "script-src 'self' 'unsafe-inline' https://cdn.quilljs.com https://cdn.jsdelivr.net",
-      "style-src 'self' 'unsafe-inline' https://cdn.quilljs.com https://fonts.googleapis.com",
-      "img-src 'self' data: https:",
-      "font-src 'self' https://fonts.gstatic.com",
-      "connect-src 'self' https://*.supabase.co",
-      "form-action 'self' https://formspree.io",
-      "frame-ancestors 'none'",
-      "base-uri 'self'",
-      "object-src 'none'",
-    ].join("; "),
-  );
+  // La politique CSP (script-src / style-src avec hachages) est générée par Astro
+  // sous forme de <meta> (experimental.csp). Ici : en-têtes qui doivent être HTTP.
   headers.set("X-Content-Type-Options", "nosniff");
   headers.set("X-Frame-Options", "DENY");
   headers.set("Referrer-Policy", "strict-origin-when-cross-origin");

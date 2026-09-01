@@ -7,8 +7,7 @@ if (!ADMIN_USER_ID) {
 }
 
 export type AdminCheck =
-  | { ok: true; userId: string }
-  | { ok: false; response: Response };
+  { ok: true; userId: string } | { ok: false; response: Response };
 
 function json(body: unknown, status: number): Response {
   return new Response(JSON.stringify(body), {
@@ -34,7 +33,10 @@ export function getBearerToken(request: Request): string | null {
 export async function verifyAdmin(request: Request): Promise<AdminCheck> {
   const token = getBearerToken(request);
   if (!token) {
-    return { ok: false, response: json({ error: "Authentification requise." }, 401) };
+    return {
+      ok: false,
+      response: json({ error: "Authentification requise." }, 401),
+    };
   }
 
   const { data, error } = await supabaseServer.auth.getUser(token);

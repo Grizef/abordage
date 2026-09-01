@@ -1,0 +1,18 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const title = "Page introuvable";
+const description = "La page demandée n'existe pas ou a été déplacée.";
+---
+
+<Layout title={title} description={description} permalink="/404">
+  <div class="page-container" style="text-align:center;">
+    <h1 class="page-title">Page introuvable</h1>
+    <section class="content-section">
+      <p class="content-text" style="text-align:center;">
+        Désolé, cette page n'existe pas ou a été déplacée.
+      </p>
+      <p><a class="call-to-action" href="/">Retour à l'accueil</a></p>
+    </section>
+  </div>
+</Layout>

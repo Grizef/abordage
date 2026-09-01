@@ -31,12 +31,18 @@ async function uniqueSlug(base: string): Promise<string> {
 export const POST: APIRoute = async ({ request }) => {
   const data = await request.json().catch(() => null);
   if (!data) {
-    return Response.json({ error: "Corps de requête invalide." }, { status: 400 });
+    return Response.json(
+      { error: "Corps de requête invalide." },
+      { status: 400 },
+    );
   }
 
   const { title, publishDate, description, image, contenu } = data;
   if (!title || !publishDate || !description || !contenu) {
-    return Response.json({ error: "Tous les champs sont requis." }, { status: 400 });
+    return Response.json(
+      { error: "Tous les champs sont requis." },
+      { status: 400 },
+    );
   }
 
   const base = slugify(String(title));
@@ -69,6 +75,9 @@ export const POST: APIRoute = async ({ request }) => {
     return Response.json({ success: true, data: inserted }, { status: 200 });
   } catch (err) {
     console.error("Erreur lors de la sauvegarde:", err);
-    return Response.json({ error: "Erreur lors de la sauvegarde." }, { status: 500 });
+    return Response.json(
+      { error: "Erreur lors de la sauvegarde." },
+      { status: 500 },
+    );
   }
 };

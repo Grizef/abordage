@@ -12,7 +12,10 @@ export const GET: APIRoute = async () => {
 
     if (error) {
       console.error("Supabase select error:", error);
-      return Response.json({ success: false, error: error.message }, { status: 500 });
+      return Response.json(
+        { success: false, error: error.message },
+        { status: 500 },
+      );
     }
 
     const list = (data ?? []).map((item) => ({

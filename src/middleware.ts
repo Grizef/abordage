@@ -22,7 +22,9 @@ function clientIp(request: Request): string {
 function rateLimited(request: Request): boolean {
   const ip = clientIp(request);
   const now = Date.now();
-  const recent = (hits.get(ip) ?? []).filter((t) => now - t < RATE_LIMIT.windowMs);
+  const recent = (hits.get(ip) ?? []).filter(
+    (t) => now - t < RATE_LIMIT.windowMs,
+  );
   recent.push(now);
   hits.set(ip, recent);
   return recent.length > RATE_LIMIT.max;

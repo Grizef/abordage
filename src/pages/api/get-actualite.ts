@@ -8,7 +8,10 @@ export const POST: APIRoute = async ({ request }) => {
     const body = await request.json().catch(() => null);
     const slug = body?.slug;
     if (!slug) {
-      return Response.json({ success: false, error: "slug manquant" }, { status: 400 });
+      return Response.json(
+        { success: false, error: "slug manquant" },
+        { status: 400 },
+      );
     }
 
     const { data, error } = await supabaseServer
@@ -19,7 +22,10 @@ export const POST: APIRoute = async ({ request }) => {
 
     if (error || !data) {
       console.error("Supabase select error:", error);
-      return Response.json({ success: false, error: "introuvable" }, { status: 404 });
+      return Response.json(
+        { success: false, error: "introuvable" },
+        { status: 404 },
+      );
     }
 
     const frontmatter = {
@@ -36,6 +42,9 @@ export const POST: APIRoute = async ({ request }) => {
     );
   } catch (err) {
     console.error("Erreur lors de la récupération:", err);
-    return Response.json({ success: false, error: "Erreur serveur" }, { status: 500 });
+    return Response.json(
+      { success: false, error: "Erreur serveur" },
+      { status: 500 },
+    );
   }
 };

@@ -14,12 +14,15 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 let quill: Quill | null = null;
 let currentEditSlug: string | null = null;
 
-async function authHeaders(extra: Record<string, string> = {}): Promise<Record<string, string>> {
+async function authHeaders(
+  extra: Record<string, string> = {},
+): Promise<Record<string, string>> {
   const {
     data: { session },
   } = await supabase.auth.getSession();
   const headers = { ...extra };
-  if (session?.access_token) headers["Authorization"] = `Bearer ${session.access_token}`;
+  if (session?.access_token)
+    headers["Authorization"] = `Bearer ${session.access_token}`;
   return headers;
 }
 
@@ -75,9 +78,13 @@ function renderLogin(): void {
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const email = (document.getElementById("email") as HTMLInputElement).value;
-    const password = (document.getElementById("password") as HTMLInputElement).value;
+    const password = (document.getElementById("password") as HTMLInputElement)
+      .value;
 
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
     if (error || !data.user) {
       if (msg) {
         msg.textContent = "Erreur de connexion. Vérifiez vos identifiants.";
@@ -118,7 +125,9 @@ async function renderAdmin(): Promise<void> {
 
   let items: NewsItem[] = [];
   try {
-    const res = await fetch("/api/lister-actualites", { headers: await authHeaders() });
+    const res = await fetch("/api/lister-actualites", {
+      headers: await authHeaders(),
+    });
     const json = await res.json();
     if (json.success) items = json.list;
   } catch (err) {
@@ -183,7 +192,9 @@ async function renderAdmin(): Promise<void> {
         });
         const j = await res.json();
         if (j.success) {
-          root.querySelector(`.admin-news-item[data-slug="${CSS.escape(slug)}"]`)?.remove();
+          root
+            .querySelector(`.admin-news-item[data-slug="${CSS.escape(slug)}"]`)
+            ?.remove();
         } else {
           alert(j.error || "Erreur lors de la suppression");
         }
@@ -207,7 +218,9 @@ async function renderAdmin(): Promise<void> {
           alert("Impossible de charger l'actualité");
           return;
         }
-        const titre = document.getElementById("titre") as HTMLInputElement | null;
+        const titre = document.getElementById(
+          "titre",
+        ) as HTMLInputElement | null;
         if (titre) titre.value = j.frontmatter?.title ?? "";
         if (quill) quill.clipboard.dangerouslyPasteHTML(j.content ?? "");
         currentEditSlug = slug;
@@ -245,9 +258,17 @@ async function renderAdmin(): Promise<void> {
     const editSlug = currentEditSlug;
 
     try {
-      const url = editSlug ? "/api/modifier-actualite" : "/api/ajouter-actualite";
+      const url = editSlug
+        ? "/api/modifier-actualite"
+        : "/api/ajouter-actualite";
       const payload = editSlug
-        ? { slug: editSlug, title, description: autoDescription, contenu, publishDate }
+        ? {
+            slug: editSlug,
+            title,
+            description: autoDescription,
+            contenu,
+            publishDate,
+          }
         : { title, description: autoDescription, contenu, publishDate };
       const res = await fetch(url, {
         method: "POST",
@@ -257,7 +278,9 @@ async function renderAdmin(): Promise<void> {
       const result = await res.json();
       if (!msg) return;
       if (result.success) {
-        msg.textContent = editSlug ? "Actualité modifiée !" : "Actualité publiée !";
+        msg.textContent = editSlug
+          ? "Actualité modifiée !"
+          : "Actualité publiée !";
         msg.style.color = "green";
         currentEditSlug = null;
         form.reset();

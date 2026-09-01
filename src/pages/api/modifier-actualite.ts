@@ -36,7 +36,10 @@ export const POST: APIRoute = async ({ request }) => {
 
     if (error) {
       console.error("Supabase update error:", error);
-      return Response.json({ success: false, error: error.message }, { status: 500 });
+      return Response.json(
+        { success: false, error: error.message },
+        { status: 500 },
+      );
     }
 
     return Response.json({ success: true, data }, { status: 200 });

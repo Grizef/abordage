@@ -1,5 +1,5 @@
 # Stack de monitoring pour l'infrastructure Abord'Âge Sud-Sarthe.
-# À déployer sur le serveur Oracle Cloud, à côté du site.
+# À déployer sur le VPS OVHcloud, à côté du site.
 #
 #   cd monitoring
 #   cp .env.example .env      # puis renseigner BESZEL_KEY après la 1re connexion au hub
@@ -7,7 +7,7 @@
 #
 # Les services n'écoutent que sur 127.0.0.1 : c'est le reverse proxy
 # (nginx / Caddy) qui les expose en HTTPS sur des sous-domaines dédiés.
-# Voir README.md pour les détails (pare-feu Oracle, proxy, notifications).
+# Voir README.md pour les détails (pare-feu ufw, proxy, notifications).
 
 services:
   # Surveillance de disponibilité : site, routes /api, certificat SSL, endpoint Supabase.
@@ -29,6 +29,9 @@ services:
     restart: unless-stopped
     volumes:
       - beszel_data:/beszel_data
+    # Permet au hub de joindre l'agent (network_mode: host) via host.docker.internal.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "127.0.0.1:8090:8090"
 

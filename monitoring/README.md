@@ -7,7 +7,7 @@ Surveillance en quasi temps réel du site et du serveur, avec accès mobile.
 | **Uptime Kuma** | Disponibilité : site, routes `/api`, endpoint Supabase, expiration du certificat SSL | PWA installable + notifications push |
 | **Beszel** | Métriques serveur : CPU, RAM, disque, réseau, conteneurs Docker | PWA installable + alertes |
 
-Les deux sont auto-hébergés sur le serveur Oracle Cloud, à côté du site. Aucune app à publier sur les stores : ce sont des PWA, on les « installe » depuis le navigateur du téléphone (écran d'accueil).
+Les deux sont auto-hébergés sur le VPS OVHcloud, à côté du site. Aucune app à publier sur les stores : ce sont des PWA, on les « installe » depuis le navigateur du téléphone (écran d'accueil).
 
 ---
 
@@ -26,29 +26,31 @@ status.abordage-sud-sarthe.fr    → <IP du serveur>
 metrics.abordage-sud-sarthe.fr   → <IP du serveur>
 ```
 
-## 3. Pare-feu Oracle Cloud — les DEUX niveaux
+## 3. Pare-feu (VPS OVHcloud, `ufw`)
 
-C'est le piège classique d'Oracle Cloud. Il faut ouvrir **80 et 443** (uniquement) à deux endroits :
-
-**a) Security List / NSG du VCN** (console web Oracle)
-`Networking → Virtual Cloud Networks → <ton VCN> → Security Lists → Default Security List → Add Ingress Rules`
-- Source `0.0.0.0/0`, TCP, port `443`
-- Source `0.0.0.0/0`, TCP, port `80`
-
-**b) Pare-feu de l'OS** (sur la machine — les images Oracle Linux/Ubuntu bloquent tout par défaut)
+Si le site a été installé avec [`DEPLOY.md`](../DEPLOY.md), `ufw` est déjà actif avec SSH, 80 et 443
+ouverts. Sinon :
 
 ```bash
-# Ubuntu (iptables)
-sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 443 -j ACCEPT
-sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 80 -j ACCEPT
-sudo netfilter-persistent save
-
-# ou Oracle Linux (firewalld)
-sudo firewall-cmd --permanent --add-service=http --add-service=https
-sudo firewall-cmd --reload
+sudo ufw allow OpenSSH      # en PREMIER, sinon on se coupe l'accès SSH
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+sudo ufw enable
 ```
 
-> On n'ouvre **pas** les ports 3001 et 8090 : ils restent sur `127.0.0.1`, seul le reverse proxy y accède.
+Ajout spécifique au monitoring : le hub Beszel (conteneur) doit joindre l'agent sur l'hôte
+(port `45876`). `ufw` filtre aussi ce trafic venant de Docker ; on l'autorise **uniquement
+depuis les réseaux Docker**, pas depuis Internet :
+
+```bash
+sudo ufw allow from 172.16.0.0/12 to any port 45876 proto tcp
+```
+
+> On n'ouvre **pas** 3001, 8090 ni 45876 au public : 3001 et 8090 restent sur `127.0.0.1`,
+> seul le reverse proxy y accède.
+
+Si le **Network Firewall** OVH est activé sur l'IP du VPS (désactivé par défaut), y autoriser
+aussi TCP 22, 80 et 443.
 
 ## 4. Reverse proxy
 
@@ -121,7 +123,9 @@ L'endpoint `/api/health` (ajouté dans ce dépôt, `src/pages/api/health.ts`) te
 
 ## 7. Configurer Beszel
 
-1. Dans le hub : `Add system` → nom `oracle-prod`, host `localhost`, port `45876`.
+1. Dans le hub : `Add system` → nom `ovh-prod`, host `host.docker.internal`, port `45876`.
+   (Pas `localhost` : dans le conteneur du hub, `localhost` désigne le conteneur lui-même,
+   pas le serveur.)
 2. Copier la **Public key** affichée, la coller dans `monitoring/.env` :
    ```
    BESZEL_KEY="ssh-ed25519 AAAA..."

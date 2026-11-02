@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import 'quill/dist/quill.snow.css';
 ---
 
 <!-- Page Admin Astro avec connexion Supabase et formulaire d'actualité connecté à l'API et éditeur QuillJS -->
@@ -8,15 +9,13 @@ import '../styles/global.css';
     <title>Admin Actualités</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
-      rel="stylesheet"
-    />
     <script type="module">
+      import Quill from 'quill';
       import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
       
       const supabaseUrl = 'https://jdhozumgxyakizslzlbo.supabase.co';
       const supabaseKey = 'sb_publishable_VqWYINhepnsOv76_z9plMA_2uWd_eGb';
+      window.Quill = Quill;
       window.supabaseClient = createClient(supabaseUrl, supabaseKey);
     </script>
     <style>
@@ -208,7 +207,6 @@ import '../styles/global.css';
       <div id="admin-app"></div>
     </main>
 
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script type="module">
       const W = window;
       const supabaseClient = W.supabaseClient;
@@ -221,6 +219,12 @@ import '../styles/global.css';
         const adminUserId = '95d11459-3625-4b39-b98a-14f50ed9e596';
         
         return userId === adminUserId;
+      }
+
+      // Les routes /api/* exigent le jeton de session admin (vérifié par src/middleware.ts).
+      async function authHeaders() {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        return { 'Content-Type': 'application/json', Authorization: `Bearer ${session?.access_token ?? ''}` };
       }
 
       async function logout() {
@@ -302,7 +306,7 @@ import '../styles/global.css';
         let actualites = [];
         
         try {
-          const res = await fetch('/api/lister-actualites');
+          const res = await fetch('/api/lister-actualites', { headers: await authHeaders() });
           const json = await res.json();
           if (json.success) actualites = json.list;
         } catch (err) {
@@ -367,7 +371,7 @@ import '../styles/global.css';
             try {
               const res = await fetch('/api/supprimer-actualite', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: await authHeaders(),
                 body: JSON.stringify({ slug })
               });
               const j = await res.json();
@@ -388,7 +392,7 @@ import '../styles/global.css';
             try {
               const res = await fetch('/api/get-actualite', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: await authHeaders(),
                 body: JSON.stringify({ slug })
               });
               const j = await res.json();
@@ -414,13 +418,13 @@ import '../styles/global.css';
         const editorDiv = document.getElementById("editor");
         if (!editorDiv) return;
         
-        const QuillCtor = W.Quill || (typeof W.Quill !== 'undefined' ? W.Quill : null);
-        if (!QuillCtor) {
-          setTimeout(renderAdmin, 250);
-          return;
-        }
-        
         if (!W.quill) {
+          const QuillCtor = W.Quill;
+          if (!QuillCtor) {
+            setTimeout(renderAdmin, 250);
+            return;
+          }
+
           W.quill = new QuillCtor("#editor", {
             modules: {
               toolbar: [
@@ -455,14 +459,14 @@ import '../styles/global.css';
             if (editSlug) {
               res = await fetch('/api/modifier-actualite', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: await authHeaders(),
                 body: JSON.stringify({ slug: editSlug, title, description: autoDescription, contenu, publishDate })
               });
               W.currentEditSlug = null;
             } else {
               res = await fetch('/api/ajouter-actualite', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: await authHeaders(),
                 body: JSON.stringify({ title, description: autoDescription, contenu, publishDate })
               });
             }

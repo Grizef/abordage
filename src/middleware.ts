@@ -17,9 +17,11 @@ const RATE_LIMIT = { windowMs: 60_000, max: 30 };
 const hits = new Map<string, number[]>();
 
 function clientIp(request: Request): string {
+  // X-Real-IP est posé par Nginx Proxy Manager ; le 1er X-Forwarded-For est falsifiable par le client.
+  const real = request.headers.get("x-real-ip");
+  if (real) return real;
   const fwd = request.headers.get("x-forwarded-for");
-  if (fwd) return fwd.split(",")[0]!.trim();
-  return request.headers.get("x-real-ip") ?? "unknown";
+  return fwd ? fwd.split(",")[0]!.trim() : "unknown";
 }
 
 function rateLimited(request: Request): boolean {

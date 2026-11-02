@@ -1,0 +1,24 @@
+# Site Abord'Âge sur le VPS : /opt/websites/site-abordage (clone de ce dépôt + .env en chmod 600).
+#   sudo docker compose up -d --build
+# Aucun port publié : Nginx Proxy Manager joint le conteneur par le réseau Docker « proxy ».
+services:
+  web:
+    build:
+      context: .
+      secrets: [env]
+    image: site-abordage:latest
+    container_name: site-abordage
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    networks: [proxy]
+
+secrets:
+  env:
+    file: ./.env
+
+networks:
+  proxy:
+    external: true

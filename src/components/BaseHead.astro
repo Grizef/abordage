@@ -11,19 +11,29 @@ interface Props {
 	canonical?: string;
 }
 
-const { title, description, image = DEFAULT_OG_IMAGE, canonical } = Astro.props;
+const { title, description = SITE_DESCRIPTION, image = DEFAULT_OG_IMAGE, canonical } = Astro.props;
 
-// Build requestUrl safely as a string
-const _astroUrl = (Astro as any).url;
-const requestUrl = typeof _astroUrl === 'string' ? _astroUrl : (_astroUrl ? String(_astroUrl) : SITE_URL);
-const canonicalURL = canonical ? new URL(canonical, SITE_URL) : (_astroUrl ? new URL(String(_astroUrl), SITE_URL) : new URL('/', SITE_URL));
+const canonicalURL = new URL(canonical ?? Astro.url.pathname, SITE_URL);
+const imageURL = new URL(image, SITE_URL);
+
+const orgSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'Organization',
+	name: ORG_NAME,
+	url: SITE_URL,
+	logo: new URL(ORG_LOGO, SITE_URL).toString(),
+	sameAs: [
+		'https://www.facebook.com/abordagesudsarthe',
+		'https://www.instagram.com/abordagesudsarthe',
+	],
+};
 ---
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="sitemap" href="/sitemap.xml" />
+<link rel="sitemap" href="/sitemap-index.xml" />
 <link
 	rel="alternate"
 	type="application/rss+xml"
@@ -48,26 +58,19 @@ const canonicalURL = canonical ? new URL(canonical, SITE_URL) : (_astroUrl ? new
 <!-- Open Graph / Facebook -->
 <meta property="og:locale" content={SITE_LANG} />
 <meta property="og:type" content="website" />
-<meta property="og:url" content={requestUrl} />
+<meta property="og:url" content={canonicalURL.toString()} />
 <meta property="og:site_name" content={SITE_TITLE} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, SITE_URL)} />
+<meta property="og:image" content={imageURL.toString()} />
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content={TWITTER_HANDLE} />
-<meta name="twitter:creator" content={TWITTER_HANDLE} />
+{TWITTER_HANDLE && <meta name="twitter:site" content={TWITTER_HANDLE} />}
+{TWITTER_HANDLE && <meta name="twitter:creator" content={TWITTER_HANDLE} />}
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={new URL(image, SITE_URL)} />
+<meta name="twitter:image" content={imageURL.toString()} />
 
 <!-- JSON-LD Organization -->
-<script type="application/ld+json">{
-	"@context": "https://schema.org",
-	"@type": "Organization",
-	"name": "${ORG_NAME}",
-	"url": "${SITE_URL}",
-	"logo": "${ORG_LOGO}",
-	"sameAs": []
-}</script>
+<script type="application/ld+json" set:html={JSON.stringify(orgSchema)} is:inline></script>

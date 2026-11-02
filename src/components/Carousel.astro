@@ -1,34 +1,38 @@
 ---
 const images = [
-  { src: "partenaires/banque_populaire.png", alt: "Banque Populaire" },
-  { src: "partenaires/carsat.jpg", alt: "Carsat" },
-  { src: "partenaires/communes_chateau.jpg", alt: "Commune de Château" },
-  { src: "partenaires/communes_luche.jpg", alt: "Commune de Luché" },
-  { src: "partenaires/communes_mansige.jpg", alt: "Commune de Mansigné" },
-  { src: "partenaires/communes_sudsarthe.jpg", alt: "Communauté Sud Sarthe" },
-  { src: "partenaires/communes_vaas.jpg", alt: "Commune de Vaas" },
-  { src: "partenaires/cpam.jpg", alt: "CPAM" },
-  { src: "partenaires/credit_agricole.png", alt: "Crédit Agricole" },
-  { src: "partenaires/fdva.png", alt: "FDVA" },
-  { src: "partenaires/finaceurs_prevention.png", alt: "Financeurs Prévention" },
-  { src: "partenaires/gip.jpg", alt: "GIP Café Cultures" },
-  { src: "partenaires/ope_bouchons.jpg", alt: "Opération Bouchons" },
-  { src: "partenaires/radio_prevert.jpg", alt: "Radio Prévert" },
-  { src: "partenaires/richard_auto.jpg", alt: "Richard Automobiles" },
+  { src: "/partenaires/banque_populaire.png", alt: "Banque Populaire" },
+  { src: "/partenaires/carsat.jpg", alt: "Carsat" },
+  { src: "/partenaires/communes_chateau.jpg", alt: "Commune de Château" },
+  { src: "/partenaires/communes_luche.jpg", alt: "Commune de Luché" },
+  { src: "/partenaires/communes_mansige.jpg", alt: "Commune de Mansigné" },
+  { src: "/partenaires/communes_sudsarthe.jpg", alt: "Communauté Sud Sarthe" },
+  { src: "/partenaires/communes_vaas.jpg", alt: "Commune de Vaas" },
+  { src: "/partenaires/cpam.jpg", alt: "CPAM" },
+  { src: "/partenaires/credit_agricole.png", alt: "Crédit Agricole" },
+  { src: "/partenaires/fdva.png", alt: "FDVA" },
+  { src: "/partenaires/finaceurs_prevention.png", alt: "Financeurs Prévention" },
+  { src: "/partenaires/gip.jpg", alt: "GIP Café Cultures" },
+  { src: "/partenaires/ope_bouchons.jpg", alt: "Opération Bouchons" },
+  { src: "/partenaires/radio_prevert.jpg", alt: "Radio Prévert" },
+  { src: "/partenaires/richard_auto.jpg", alt: "Richard Automobiles" },
 ];
 ---
 
-<div class="carousel-container">
-  <div class="carousel-track" id="carousel">
+<section class="carousel-container" aria-label="Nos partenaires et financeurs" aria-roledescription="carrousel">
+  <div class="carousel-track" id="carousel" tabindex="0">
     {images.map(({ src, alt }) => (
-      <img src={src} alt={alt} loading="lazy" />
+      <img src={src} alt={alt} loading="lazy" width="180" height="80" />
     ))}
   </div>
   <div class="carousel-controls">
-    <button class="carousel-button" onclick="scrollCarousel(-1)">← Précédent</button>
-    <button class="carousel-button" onclick="scrollCarousel(1)">Suivant →</button>
+    <button type="button" class="carousel-button" data-dir="-1" aria-controls="carousel">
+      <span aria-hidden="true">←</span> Précédent
+    </button>
+    <button type="button" class="carousel-button" data-dir="1" aria-controls="carousel">
+      Suivant <span aria-hidden="true">→</span>
+    </button>
   </div>
-</div>
+</section>
 
 <style>
 .carousel-container {
@@ -47,10 +51,13 @@ const images = [
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-
-  /* Hide scrollbar */
   scrollbar-width: none;
   -ms-overflow-style: none;
+}
+
+.carousel-track:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .carousel-track::-webkit-scrollbar {
@@ -90,36 +97,32 @@ const images = [
   border-color: var(--accent);
 }
 
-/* Responsive */
+.carousel-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-track { scroll-behavior: auto; }
+}
+
 @media (max-width: 768px) {
-  .carousel-track img {
-    width: 140px;
-    height: 60px;
-  }
-  
-  .carousel-button {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.9rem;
-  }
+  .carousel-track img { width: 140px; height: 60px; }
+  .carousel-button { padding: 0.4rem 0.8rem; font-size: 0.9rem; }
 }
 
 @media (max-width: 480px) {
-  .carousel-track img {
-    width: 120px;
-    height: 50px;
-  }
-  
-  .carousel-button {
-    padding: 0.3rem 0.6rem;
-    font-size: 0.8rem;
-  }
+  .carousel-track img { width: 120px; height: 50px; }
+  .carousel-button { padding: 0.3rem 0.6rem; font-size: 0.8rem; }
 }
 </style>
 
-<script is:inline>
-  function scrollCarousel(direction) {
-    const track = document.getElementById('carousel');
-    const scrollAmount = 600 * direction;
-    track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-  }
+<script>
+  const track = document.getElementById("carousel");
+  document.querySelectorAll<HTMLButtonElement>(".carousel-button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const dir = Number(btn.dataset.dir ?? "1");
+      track?.scrollBy({ left: track.clientWidth * 0.8 * dir, behavior: "smooth" });
+    });
+  });
 </script>

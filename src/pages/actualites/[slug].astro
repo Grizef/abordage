@@ -1,6 +1,7 @@
 ---
 import { supabase } from '../../lib/supabase';
 import Layout from '../../layouts/Layout.astro';
+import { sanitizeArticleHtml } from '../../lib/sanitize';
 
 export const prerender = false;
 
@@ -22,6 +23,7 @@ if (error || !actualite) {
 }
 
 const { title, description, content_html, publish_date } = actualite;
+const safeHtml = sanitizeArticleHtml(content_html ?? '');
 const permalink = `${Astro.site?.href ?? '/'}actualites/${slug}`;
 ---
 
@@ -33,7 +35,7 @@ const permalink = `${Astro.site?.href ?? '/'}actualites/${slug}`;
   </header>
   <div class="container">
     <article class="content">
-      <div set:html={content_html} />
+      <div set:html={safeHtml} />
     </article>
     <hr />
   </div>

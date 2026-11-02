@@ -1,33 +1,53 @@
-import { supabaseServer } from '../../lib/supabaseServer';
+import type { APIRoute } from "astro";
+import { supabaseServer } from "../../lib/supabaseServer";
+import { sanitizeArticleHtml } from "../../lib/sanitize";
 
-export async function POST({ request }: { request: any }) {
-  const { slug, title, description, contenu, publishDate } = await request.json();
-  
-  if (!slug || !title || !description || !contenu || !publishDate) {
-    return new Response(JSON.stringify({ success: false, error: 'Tous les champs sont requis.' }), { status: 400 });
+export const prerender = false;
+
+export const POST: APIRoute = async ({ request }) => {
+  const body = await request.json().catch(() => null);
+  if (!body) {
+    return Response.json(
+      { success: false, error: "Corps de requête invalide." },
+      { status: 400 },
+    );
   }
-  
+
+  const { slug, title, description, contenu, publishDate } = body;
+  if (!slug || !title || !description || !contenu || !publishDate) {
+    return Response.json(
+      { success: false, error: "Tous les champs sont requis." },
+      { status: 400 },
+    );
+  }
+
   try {
     const { data, error } = await supabaseServer
-      .from('news')
+      .from("news")
       .update({
         title,
         description,
-        content_html: contenu,
-        publish_date: publishDate
+        content_html: sanitizeArticleHtml(String(contenu)),
+        publish_date: publishDate,
       })
-      .eq('slug', slug)
+      .eq("slug", slug)
       .select()
       .single();
-    
+
     if (error) {
-      console.error('Supabase update error:', error);
-      return new Response(JSON.stringify({ success: false, error: error.message }), { status: 500 });
+      console.error("Supabase update error:", error);
+      return Response.json(
+        { success: false, error: error.message },
+        { status: 500 },
+      );
     }
-    
-    return new Response(JSON.stringify({ success: true, data }), { status: 200 });
+
+    return Response.json({ success: true, data }, { status: 200 });
   } catch (err) {
-    console.error('Erreur lors de la modification:', err);
-    return new Response(JSON.stringify({ success: false, error: 'Modification impossible.' }), { status: 500 });
+    console.error("Erreur lors de la modification:", err);
+    return Response.json(
+      { success: false, error: "Modification impossible." },
+      { status: 500 },
+    );
   }
-}
+};

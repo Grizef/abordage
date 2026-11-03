@@ -4,12 +4,20 @@ on:
   push:
     branches: [master]
   pull_request:
+  # Retour arrière manuel : Actions → CI → Run workflow, avec le SHA complet d'un commit de master.
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: "SHA complet (40 caractères) du commit à déployer"
+        required: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -18,3 +26,23 @@ jobs:
       - run: npm run lint
       - run: npm run check
       - run: npm run build
+
+  deploy:
+    needs: build
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    concurrency: deploy-site-abordage
+    steps:
+      # La clé ne peut lancer que /opt/scripts/deploy.sh (commande forcée côté VPS) ;
+      # le build, le contrôle de santé et le retour arrière se font là-bas.
+      - name: Déployer sur le VPS
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          SHA: ${{ inputs.sha || github.sha }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          ssh -i ~/.ssh/deploy_key deploy@abordage-sud-sarthe.fr site-abordage "$SHA"
